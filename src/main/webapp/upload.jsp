@@ -21,7 +21,7 @@
                 <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
             </ul>
         </nav>
- 
+
         <article>
             <h3>File Upload</h3>
             <form method="POST" enctype="multipart/form-data" action="Image">
