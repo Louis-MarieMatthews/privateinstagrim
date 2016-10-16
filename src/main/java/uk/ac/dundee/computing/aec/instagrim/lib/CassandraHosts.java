@@ -12,12 +12,11 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
-import com.datastax.driver.core.*;
-
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Metadata;
+import com.datastax.driver.core.Host;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * ********************************************************

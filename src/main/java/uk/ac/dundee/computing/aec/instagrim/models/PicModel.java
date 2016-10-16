@@ -30,23 +30,18 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.utils.Bytes;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Date;
-import java.util.LinkedList;
 import javax.imageio.ImageIO;
-import static org.imgscalr.Scalr.*;
-import org.imgscalr.Scalr.Method;
+import org.imgscalr.Scalr;
 
-import uk.ac.dundee.computing.aec.instagrim.lib.*;
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 
@@ -150,9 +145,9 @@ public class PicModel
   
   public static BufferedImage createThumbnail(BufferedImage img)
   {
-    img = resize(img, Method.SPEED, 250, OP_ANTIALIAS, OP_GRAYSCALE);
+    img = Scalr.resize(img, Scalr.Method.SPEED, 250, Scalr.OP_ANTIALIAS, Scalr.OP_GRAYSCALE);
     // Let's add a little border before we return result.
-    return pad(img, 2);
+    return Scalr.pad(img, 2);
   }
   
   
@@ -160,8 +155,8 @@ public class PicModel
   public static BufferedImage createProcessed(BufferedImage img)
   {
     int width = img.getWidth() - 1;
-    img = resize(img, Method.SPEED, width, OP_ANTIALIAS, OP_GRAYSCALE);
-    return pad(img, 4);
+    img = Scalr.resize(img, Scalr.Method.SPEED, width, Scalr.OP_ANTIALIAS, Scalr.OP_GRAYSCALE);
+    return Scalr.pad(img, 4);
   }
   
   

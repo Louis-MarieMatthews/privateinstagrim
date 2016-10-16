@@ -12,10 +12,12 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.datastax.driver.core.*;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.SimpleStatement;
 
 public final class Keyspaces
 {
