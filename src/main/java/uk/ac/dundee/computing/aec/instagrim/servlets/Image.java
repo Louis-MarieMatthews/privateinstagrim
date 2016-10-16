@@ -90,7 +90,9 @@ public class Image extends HttpServlet
     throws ServletException, IOException
   {
     // TODO Auto-generated method stub
-    String args[] = Convertors.SplitRequestPath(request);
+    String[] args = Convertors.splitPath(request.getRequestURI());
+    for(int i = 0; i < args.length; i++) {
+    }
     int command;
     try {
       command = (Integer) commandsMap.get(args[1]);

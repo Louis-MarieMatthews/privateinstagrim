@@ -69,7 +69,7 @@ public class PicModel
     try {
       Convertors convertor = new Convertors();
 
-      String types[] = Convertors.SplitFiletype(type);
+      String types[] = Convertors.splitPath(type);
       ByteBuffer buffer = ByteBuffer.wrap(b);
       int length = b.length;
       java.util.UUID picid = convertor.getTimeUUID();

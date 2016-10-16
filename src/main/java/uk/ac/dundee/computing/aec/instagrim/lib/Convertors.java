@@ -13,10 +13,8 @@
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
 import java.net.URLDecoder;
-import java.util.StringTokenizer;
-//import java.util.UUID;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
-import com.eaio.uuid.UUID;
 
 public final class Convertors
 {
@@ -33,16 +31,15 @@ public final class Convertors
   
   
   
-  public static java.util.UUID getTimeUUID()
+  public static UUID getTimeUUID()
   {
-    return java.util.UUID.fromString(new com.eaio.uuid.UUID().toString());
+    return UUID.fromString(new com.eaio.uuid.UUID().toString());
   }
   
   
   
-  public static byte[] asByteArray(java.util.UUID uuid)
+  public static byte[] asByteArray(UUID uuid)
   {
-
     long msb = uuid.getMostSignificantBits();
     long lsb = uuid.getLeastSignificantBits();
     byte[] buffer = new byte[16];
@@ -122,96 +119,41 @@ public final class Convertors
   }
   
   
-  
-  public static String[] SplitTags(String tags)
+  /**
+   * Explode comma-delimited tags into a String array and adds _No-Tag_ at the 
+   * end. This method is so far unused in the rest of the project.
+   * 
+   * @param tags a list of tags separated by a comma
+   * @return an array containing the tags with _No-Tag_ at the end.
+   */
+  public static String[] splitTags(String tags)
   {
-    String args[] = null;
-
-    StringTokenizer st = Convertors.SplitTagString(tags);
-    args = new String[st.countTokens() + 1];  //+1 for _No_Tag_
-    //Lets assume the number is the last argument
-
-    int argv = 0;
-    while (st.hasMoreTokens()) {;
-      args[argv] = new String();
-      args[argv] = st.nextToken();
-      argv++;
-    }
-    args[argv] = "_No-Tag_";
+    String[] splitPath = splitPath(tags);
+    String[] args = new String[splitPath.length];
+    args[args.length] = "_No-Tag_";
     return args;
   }
   
   
-  
-  private static StringTokenizer SplitTagString(String str)
-  {
-    return new StringTokenizer(str, ",");
-  }
-  
-  
-  
-  public static String[] SplitFiletype(String type)
-  {
-    String args[] = null;
-
-    StringTokenizer st = SplitString(type);
-    args = new String[st.countTokens()];
-    //Lets assume the number is the last argument
-
-    int argv = 0;
-    while (st.hasMoreTokens()) {;
-      args[argv] = new String();
-
-      args[argv] = st.nextToken();
+  /**
+   * Accepts a path and tries to explode it into an array of valid filenames.
+   * 
+   * @param path the string supposed to represent a path
+   * @return the path exploded into an array
+   */
+  public static String[] splitPath(String path) {
+    String[] explodedPath;
+    if ( path.charAt(0) == '/' ) {
+      path = path.substring(1, path.length());
+    }
+    explodedPath = path.split("/");
+    for (int i = 0; i < explodedPath.length; i++) {
       try {
-        //System.out.println("String was "+URLDecoder.decode(args[argv],"UTF-8"));
-        args[argv] = URLDecoder.decode(args[argv], "UTF-8");
-
+        explodedPath[i] = URLDecoder.decode(explodedPath[i], "UTF-8");
       } catch (Exception et) {
-        System.out.println("Bad URL Encoding" + args[argv]);
+        System.out.println("Bad URL Encoding" + explodedPath[i]);
       }
-      argv++;
     }
-
-    //so now they'll be in the args array.  
-    // argv[0] should be the user directory
-    return args;
-  }
-  
-  
-  
-  public static String[] SplitRequestPath(HttpServletRequest request)
-  {
-    String args[] = null;
-
-    StringTokenizer st = SplitString(request.getRequestURI());
-    args = new String[st.countTokens()];
-    //Lets assume the number is the last argument
-
-    int argv = 0;
-    while (st.hasMoreTokens()) {;
-      args[argv] = new String();
-
-      args[argv] = st.nextToken();
-      try {
-        //System.out.println("String was "+URLDecoder.decode(args[argv],"UTF-8"));
-        args[argv] = URLDecoder.decode(args[argv], "UTF-8");
-
-      } catch (Exception et) {
-        System.out.println("Bad URL Encoding" + args[argv]);
-      }
-      argv++;
-    }
-
-    //so now they'll be in the args array.  
-    // argv[0] should be the user directory
-    return args;
-  }
-  
-  
-  
-  private static StringTokenizer SplitString(String str)
-  {
-    return new StringTokenizer(str, "/");
+    return explodedPath;
   }
 }
