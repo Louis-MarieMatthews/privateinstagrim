@@ -1,7 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * The java code follows the Java Programming Style Guidelines 7.0 from 
+ * Geotechnical Software Services available at this address:
+ * http://geosoft.no/development/javastyle.html .
+ * Some rules are still not applied yet.
+ * However, some rules won't be followed:
+ * 1. No underscore suffix at the end of private variables (r8)
+ * 2. No space between a function and its parenthesis (r74)
+ * 3. Class and package names (can't be changed, lead to problems) (r3)
+ * 4. Abbreviations and the use of init is okay (r17, r24)
+ * 5. Statements and variable declarations don't need to be aligned (r77, r78)
  */
 package uk.ac.dundee.computing.aec.instagrim.models;
 
@@ -20,69 +27,79 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  *
  * @author Administrator
  */
-public class User {
-
-    Cluster cluster;
-
-    public User() {
-
+public class User
+{
+  Cluster cluster;
+  
+  
+  
+  public User()
+  {
+  }
+  
+  
+  
+  public boolean RegisterUser(String username, String Password)
+  {
+    AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
+    String EncodedPassword = null;
+    try {
+      EncodedPassword = sha1handler.SHA1(Password);
+    } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
+      System.out.println("Can't check your password");
+      return false;
     }
+    Session session = cluster.connect("instagrim");
+    PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
 
-    public boolean RegisterUser(String username, String Password) {
-        AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
-        String EncodedPassword = null;
-        try {
-            EncodedPassword = sha1handler.SHA1(Password);
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
-            System.out.println("Can't check your password");
-            return false;
+    BoundStatement boundStatement = new BoundStatement(ps);
+    session.execute( // this is where the query is executed
+        boundStatement.bind( // here you are binding the 'boundStatement'
+            username, EncodedPassword));
+    //We are assuming this always works.  Also a transaction would be good here !
+
+    return true;
+  }
+  
+  
+  
+  public boolean IsValidUser(String username, String Password)
+  {
+    AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
+    String EncodedPassword = null;
+    try {
+      EncodedPassword = sha1handler.SHA1(Password);
+    } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
+      System.out.println("Can't check your password");
+      return false;
+    }
+    Session session = cluster.connect("instagrim");
+    PreparedStatement ps = session.prepare("select password from userprofiles where login = ?");
+    ResultSet rs = null;
+    BoundStatement boundStatement = new BoundStatement(ps);
+    rs = session.execute( // this is where the query is executed
+        boundStatement.bind( // here you are binding the 'boundStatement'
+            username));
+    if (rs.isExhausted()) {
+      System.out.println("No Images returned");
+      return false;
+    }
+    else {
+      for (Row row : rs) {
+
+        String StoredPass = row.getString("password");
+        if (StoredPass.compareTo(EncodedPassword) == 0) {
+          return true;
         }
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
-
-        BoundStatement boundStatement = new BoundStatement(ps);
-        session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        username, EncodedPassword));
-        //We are assuming this always works.  Also a transaction would be good here !
-
-        return true;
+      }
     }
-
-    public boolean IsValidUser(String username, String Password) {
-        AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
-        String EncodedPassword = null;
-        try {
-            EncodedPassword = sha1handler.SHA1(Password);
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
-            System.out.println("Can't check your password");
-            return false;
-        }
-        Session session = cluster.connect("instagrim");
-        PreparedStatement ps = session.prepare("select password from userprofiles where login =?");
-        ResultSet rs = null;
-        BoundStatement boundStatement = new BoundStatement(ps);
-        rs = session.execute( // this is where the query is executed
-                boundStatement.bind( // here you are binding the 'boundStatement'
-                        username));
-        if (rs.isExhausted()) {
-            System.out.println("No Images returned");
-            return false;
-        } else {
-            for (Row row : rs) {
-
-                String StoredPass = row.getString("password");
-                if (StoredPass.compareTo(EncodedPassword) == 0) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public void setCluster(Cluster cluster) {
-        this.cluster = cluster;
-    }
-
+    return false;
+  }
+  
+  
+  
+  public void setCluster(Cluster cluster)
+  {
+    this.cluster = cluster;
+  }
 }

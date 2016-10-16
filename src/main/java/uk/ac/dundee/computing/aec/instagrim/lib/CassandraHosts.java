@@ -1,3 +1,15 @@
+/*
+ * The java code follows the Java Programming Style Guidelines 7.0 from 
+ * Geotechnical Software Services available at this address:
+ * http://geosoft.no/development/javastyle.html .
+ * Some rules are still not applied yet.
+ * However, some rules won't be followed:
+ * 1. No underscore suffix at the end of private variables (r8)
+ * 2. No space between a function and its parenthesis (r74)
+ * 3. Class and package names (can't be changed, lead to problems) (r3)
+ * 4. Abbreviations and the use of init is okay (r17, r24)
+ * 5. Statements and variable declarations don't need to be aligned (r77, r78)
+ */
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
 import com.datastax.driver.core.*;
@@ -19,66 +31,79 @@ import java.util.List;
  *
  *
  */
-public final class CassandraHosts {
+public final class CassandraHosts
+{
+  private static Cluster cluster;
+  static String Host = "127.0.0.1";  //at least one starting point to talk to
+  //static String Host = "localhost";
+  
+  
+  
+  public CassandraHosts()
+  { 
 
-    private static Cluster cluster;
-    static String Host = "127.0.0.1";  //at least one starting point to talk to
-    //static String Host = "localhost";
+  }
+  
+  
+  
+  public static String getHost()
+  {
+    return (Host);
+  }
+  
+  
+  
+  public static String[] getHosts(Cluster cluster)
+  {
+    if (cluster == null) {
+      System.out.println("Creating cluster connection");
+      cluster = Cluster.builder().addContactPoint(Host).build();
+    }
+    System.out.println("Cluster Name " + cluster.getClusterName());
+    Metadata mdata = null;
+    try {
+      mdata = cluster.getMetadata();
+    } catch (Exception et) {
+      System.out.println("Can't get metadata");
+      System.out.println("Exception " + et);
+      return (null);
+    }
+    Set<Host> hosts = mdata.getAllHosts();
+    String sHosts[] = new String[hosts.size()];
 
-    public CassandraHosts() {
+    Iterator<Host> it = hosts.iterator();
+    int i = 0;
+    while (it.hasNext()) {
+      Host ch = it.next();
+      sHosts[i] = (String) ch.getAddress().toString();
 
+      System.out.println("Hosts" + ch.getAddress().toString());
+      i++;
     }
 
-    public static String getHost() {
-        return (Host);
+    return sHosts;
+  }
+  
+  
+  
+  public static Cluster getCluster()
+  {
+    System.out.println("getCluster");
+    cluster = Cluster.builder()
+        .addContactPoint(Host).build();
+    if (getHosts(cluster) == null) {
+      return null;
     }
+    Keyspaces.SetUpKeySpaces(cluster);
 
-    public static String[] getHosts(Cluster cluster) {
+    return cluster;
 
-        if (cluster == null) {
-            System.out.println("Creating cluster connection");
-            cluster = Cluster.builder().addContactPoint(Host).build();
-        }
-        System.out.println("Cluster Name " + cluster.getClusterName());
-        Metadata mdata = null;
-        try {
-            mdata = cluster.getMetadata();
-        } catch (Exception et) {
-            System.out.println("Can't get metadata");
-            System.out.println("Exception " + et);
-            return (null);
-        }
-        Set<Host> hosts = mdata.getAllHosts();
-        String sHosts[] = new String[hosts.size()];
-
-        Iterator<Host> it = hosts.iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            Host ch = it.next();
-            sHosts[i] = (String) ch.getAddress().toString();
-
-            System.out.println("Hosts" + ch.getAddress().toString());
-            i++;
-        }
-
-        return sHosts;
-    }
-
-    public static Cluster getCluster() {
-        System.out.println("getCluster");
-        cluster = Cluster.builder()
-                .addContactPoint(Host).build();
-        if (getHosts(cluster) == null) {
-            return null;
-        }
-        Keyspaces.SetUpKeySpaces(cluster);
-
-        return cluster;
-
-    }
-
-    public void close() {
-        cluster.close();
-    }
-
+  }
+  
+  
+  
+  public void close()
+  {
+    cluster.close();
+  }
 }
