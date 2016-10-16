@@ -59,12 +59,10 @@ public class PicModel
   public void insertPic(byte[] b, String type, String name, String user)
   {
     try {
-      Convertors convertor = new Convertors();
-
       String types[] = Convertors.splitPath(type);
       ByteBuffer buffer = ByteBuffer.wrap(b);
       int length = b.length;
-      java.util.UUID picid = convertor.getTimeUUID();
+      java.util.UUID picid = Convertors.getTimeUUID();
 
       //The following is a quick and dirty way of doing this, will fill the disk quickly !
       Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
