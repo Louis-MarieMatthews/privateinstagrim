@@ -43,13 +43,15 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 /**
  * Servlet implementation class Image
  */
-@WebServlet(urlPatterns = {
-  "/Image",
-  "/Image/*",
-  "/Thumb/*",
-  "/Images",
-  "/Images/*"
-})
+@WebServlet(
+  urlPatterns = {
+    "/Image",
+    "/Image/*",
+    "/Thumb/*",
+    "/Images",
+    "/Images/*"
+  }
+)
 @MultipartConfig
 
 public class Image extends HttpServlet

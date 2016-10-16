@@ -33,7 +33,15 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  *
  * @author Administrator
  */
-@WebFilter(filterName = "ProtectPages", urlPatterns = {"/upload.jsp"}, dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.INCLUDE})
+@WebFilter(
+  filterName = "ProtectPages",
+  urlPatterns = {"/upload.jsp"},
+  dispatcherTypes = {
+    DispatcherType.REQUEST,
+    DispatcherType.FORWARD,
+    DispatcherType.INCLUDE
+  }
+)
 public class ProtectPages
   implements Filter
 {

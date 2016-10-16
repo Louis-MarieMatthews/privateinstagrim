@@ -31,7 +31,13 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  *
  * @author Administrator
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login", "/Login/*"})
+@WebServlet(
+  name = "Login",
+  urlPatterns = {
+    "/Login",
+    "/Login/*"
+  }
+)
 public class Login extends HttpServlet
 {
   Cluster cluster = null;
