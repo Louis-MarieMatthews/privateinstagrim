@@ -47,7 +47,11 @@ public class Register extends HttpServlet
   
   
   /**
-   * Handles the HTTP <code>POST</code> method.
+   * Handles the registration process once the user submits the desired
+   * credentials of their future account.
+   * TODO: More verification should be done (does one user already have this 
+   * username?). It is currently possible to change anyone's password provided 
+   * that you know their username.
    *
    * @param request servlet request
    * @param response servlet response
@@ -72,6 +76,7 @@ public class Register extends HttpServlet
   
   /**
    * Returns a short description of the servlet.
+   * Looks useless. May be remove it?
    *
    * @return a String containing servlet description
    */
