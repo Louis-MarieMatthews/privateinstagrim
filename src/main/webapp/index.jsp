@@ -25,7 +25,7 @@
             LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
             if (lg != null) {
               String username = lg.getUsername();
-              if (lg.getlogedin()) {
+              if (lg.getLogedIn()) {
           %>
         <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
           <%

@@ -170,7 +170,7 @@ public class Image extends HttpServlet
       HttpSession session = request.getSession();
       LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
       String username = "majed";
-      if (lg.getLogedIn()) {
+      if (lg.getLoggedIn()) {
         username = lg.getUsername();
       }
       if (i > 0) {

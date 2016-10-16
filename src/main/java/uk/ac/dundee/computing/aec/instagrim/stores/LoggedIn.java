@@ -13,17 +13,20 @@
 package uk.ac.dundee.computing.aec.instagrim.stores;
 
 /**
- *
- * @author Administrator
+ * Objects of this class are used to store authentification information in the 
+ * session.
+ * 
+ * @author Andy Cobley
+ * @version 1.0.1
  */
 public class LoggedIn
 {
-  private boolean logedIn = false;
+  private boolean loggedIn = false;
   private String username = null;
   
   
   
-  public void LogedIn()
+  public void LoggedIn()
   {
   }
   
@@ -43,29 +46,29 @@ public class LoggedIn
   
   
   
-  public void setLogedIn()
+  public void setLoggedIn()
   {
-    logedIn = true;
+    loggedIn = true;
   }
   
   
   
-  public void setLogedOut()
+  public void setLoggedOut()
   {
-    logedIn = false;
+    loggedIn = false;
   }
   
   
   
   public void setLoginState(boolean logedIn)
   {
-    this.logedIn = logedIn;
+    this.loggedIn = logedIn;
   }
   
   
   
-  public boolean getLogedIn()
+  public boolean getLoggedIn()
   {
-    return logedIn;
+    return loggedIn;
   }
 }
