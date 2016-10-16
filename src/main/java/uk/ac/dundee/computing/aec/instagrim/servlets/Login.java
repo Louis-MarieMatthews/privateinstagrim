@@ -40,7 +40,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 )
 public class Login extends HttpServlet
 {
-  Cluster cluster = null;
+  private Cluster cluster = null;
   
   
   

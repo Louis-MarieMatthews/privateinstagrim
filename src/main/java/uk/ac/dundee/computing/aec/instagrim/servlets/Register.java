@@ -35,7 +35,7 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
 )
 public class Register extends HttpServlet
 {
-  Cluster cluster = null;
+  private Cluster cluster = null;
   
   
   

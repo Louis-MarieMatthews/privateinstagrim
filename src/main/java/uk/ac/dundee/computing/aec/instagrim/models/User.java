@@ -29,7 +29,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  */
 public class User
 {
-  Cluster cluster;
+  private Cluster cluster;
   
   
   

@@ -52,7 +52,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
 public class PicModel
 {
-  Cluster cluster;
+  private Cluster cluster;
   
   
   
