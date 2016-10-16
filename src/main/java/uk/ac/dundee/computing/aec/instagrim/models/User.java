@@ -13,7 +13,6 @@
 package uk.ac.dundee.computing.aec.instagrim.models;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -21,6 +20,7 @@ import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
+import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 /**
  *
@@ -28,7 +28,6 @@ import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
  */
 public class User
 {
-  private Cluster cluster;
   
   
   
@@ -48,7 +47,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    Session session = cluster.connect("instagrim");
+    Session session = CassandraHosts.getCluster().connect("instagrim");
     PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
 
     BoundStatement boundStatement = new BoundStatement(ps);
@@ -72,7 +71,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    Session session = cluster.connect("instagrim");
+    Session session = CassandraHosts.getCluster().connect("instagrim");
     PreparedStatement ps = session.prepare("select password from userprofiles where login = ?");
     ResultSet rs = null;
     BoundStatement boundStatement = new BoundStatement(ps);
@@ -93,12 +92,5 @@ public class User
       }
     }
     return false;
-  }
-  
-  
-  
-  public void setCluster(Cluster cluster)
-  {
-    this.cluster = cluster;
   }
 }

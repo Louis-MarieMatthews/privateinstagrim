@@ -12,7 +12,6 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
-import com.datastax.driver.core.Cluster;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -53,7 +52,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class Image extends HttpServlet
 {
   private static final long serialVersionUID = 1L;
-  private Cluster cluster;
   private HashMap commandsMap = new HashMap();
   
   
@@ -77,7 +75,6 @@ public class Image extends HttpServlet
     throws ServletException
   {
     // TODO Auto-generated method stub
-    cluster = CassandraHosts.getCluster();
   }
   
   
@@ -121,7 +118,6 @@ public class Image extends HttpServlet
     throws ServletException, IOException
   {
     PicModel tm = new PicModel();
-    tm.setCluster(cluster);
     java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
     request.setAttribute("Pics", lsPics);
@@ -134,7 +130,6 @@ public class Image extends HttpServlet
     throws ServletException, IOException
   {
     PicModel tm = new PicModel();
-    tm.setCluster(cluster);
 
     Pic p = tm.getPic(type, java.util.UUID.fromString(image));
 
@@ -176,7 +171,6 @@ public class Image extends HttpServlet
         is.read(b);
         System.out.println("Length : " + b.length);
         PicModel tm = new PicModel();
-        tm.setCluster(cluster);
         tm.insertPic(b, type, filename, username);
 
         is.close();

@@ -14,13 +14,12 @@ package uk.ac.dundee.computing.aec.instagrim.lib;
 
 import java.net.URLDecoder;
 import java.util.UUID;
-import javax.servlet.http.HttpServletRequest;
 
 public final class Convertors
 {
-  public static int DISPLAY_IMAGE = 0;
-  public static int DISPLAY_THUMB = 1;
-  public static int DISPLAY_PROCESSED = 2;
+  public final static int DISPLAY_IMAGE = 0;
+  public final static int DISPLAY_THUMB = 1;
+  public final static int DISPLAY_PROCESSED = 2;
   
   
   

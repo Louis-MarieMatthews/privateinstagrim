@@ -12,7 +12,6 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
-import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -39,7 +38,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 )
 public class Login extends HttpServlet
 {
-  private Cluster cluster = null;
   
   
   
@@ -47,7 +45,6 @@ public class Login extends HttpServlet
     throws ServletException
   {
     // TODO Auto-generated method stub
-    cluster = CassandraHosts.getCluster();
   }
   
   
@@ -68,7 +65,6 @@ public class Login extends HttpServlet
     String password = request.getParameter("password");
 
     User us = new User();
-    us.setCluster(cluster);
     boolean isValid = us.isValidUser(username, password);
     HttpSession session = request.getSession();
     System.out.println("Session in servlet " + session);

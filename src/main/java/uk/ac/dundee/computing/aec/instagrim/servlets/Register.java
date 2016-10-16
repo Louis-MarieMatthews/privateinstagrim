@@ -12,7 +12,6 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
-import com.datastax.driver.core.Cluster;
 import java.io.IOException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,7 +19,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
@@ -33,7 +31,6 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
 )
 public class Register extends HttpServlet
 {
-  private Cluster cluster = null;
   
   
   
@@ -41,7 +38,6 @@ public class Register extends HttpServlet
     throws ServletException
   {
     // TODO Auto-generated method stub
-    cluster = CassandraHosts.getCluster();
   }
   
   
@@ -66,7 +62,6 @@ public class Register extends HttpServlet
     String password = request.getParameter("password");
 
     User us = new User();
-    us.setCluster(cluster);
     us.registerUser(username, password);
 
     response.sendRedirect("/Instagrim");
