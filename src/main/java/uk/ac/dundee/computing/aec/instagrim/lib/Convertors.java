@@ -123,11 +123,11 @@ public final class Convertors
   
   
   
-  public static String[] SplitTags(String Tags)
+  public static String[] SplitTags(String tags)
   {
     String args[] = null;
 
-    StringTokenizer st = Convertors.SplitTagString(Tags);
+    StringTokenizer st = Convertors.SplitTagString(tags);
     args = new String[st.countTokens() + 1];  //+1 for _No_Tag_
     //Lets assume the number is the last argument
 

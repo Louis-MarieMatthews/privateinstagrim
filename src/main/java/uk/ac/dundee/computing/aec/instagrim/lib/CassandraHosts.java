@@ -94,7 +94,7 @@ public final class CassandraHosts
     if (getHosts(cluster) == null) {
       return null;
     }
-    Keyspaces.SetUpKeySpaces(cluster);
+    Keyspaces.setUpKeyspaces(cluster);
 
     return cluster;
 

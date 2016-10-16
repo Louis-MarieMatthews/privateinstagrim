@@ -39,12 +39,12 @@ public class User
   
   
   
-  public boolean RegisterUser(String username, String Password)
+  public boolean registerUser(String username, String password)
   {
     AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
-    String EncodedPassword = null;
+    String encodedPassword = null;
     try {
-      EncodedPassword = sha1handler.SHA1(Password);
+      encodedPassword = sha1handler.SHA1(password);
     } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
       System.out.println("Can't check your password");
       return false;
@@ -55,7 +55,7 @@ public class User
     BoundStatement boundStatement = new BoundStatement(ps);
     session.execute( // this is where the query is executed
         boundStatement.bind( // here you are binding the 'boundStatement'
-            username, EncodedPassword));
+            username, encodedPassword));
     //We are assuming this always works.  Also a transaction would be good here !
 
     return true;
@@ -63,12 +63,12 @@ public class User
   
   
   
-  public boolean IsValidUser(String username, String Password)
+  public boolean isValidUser(String username, String password)
   {
     AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
-    String EncodedPassword = null;
+    String encodedPassword = null;
     try {
-      EncodedPassword = sha1handler.SHA1(Password);
+      encodedPassword = sha1handler.SHA1(password);
     } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
       System.out.println("Can't check your password");
       return false;
@@ -87,8 +87,8 @@ public class User
     else {
       for (Row row : rs) {
 
-        String StoredPass = row.getString("password");
-        if (StoredPass.compareTo(EncodedPassword) == 0) {
+        String storedPass = row.getString("password");
+        if (storedPass.compareTo(encodedPassword) == 0) {
           return true;
         }
       }
