@@ -16,8 +16,8 @@ import com.datastax.driver.core.utils.Bytes;
 import java.nio.ByteBuffer;
 
 /**
- *
- * @author Administrator
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 public class Pic
 {
@@ -41,7 +41,7 @@ public class Pic
   
   
   
-  public String getSUUID()
+  public String getStringUUID()
   {
     return UUID.toString();
   }

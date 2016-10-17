@@ -15,6 +15,10 @@ package uk.ac.dundee.computing.aec.instagrim.lib;
 import java.net.URLDecoder;
 import java.util.UUID;
 
+/**
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
+ */
 public final class Convertors
 {
   public final static int DISPLAY_IMAGE = 0;

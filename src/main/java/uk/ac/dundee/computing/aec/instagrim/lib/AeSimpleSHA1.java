@@ -16,6 +16,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
+ */
 public class AeSimpleSHA1
 {
   private static String convertToHex(byte[] data)

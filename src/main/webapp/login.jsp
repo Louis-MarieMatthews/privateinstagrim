@@ -1,7 +1,7 @@
 <%-- 
   Document   : login.jsp
   Created on : Sep 28, 2014, 12:04:14 PM
-  Author   : Administrator
+  Author   : Andy Cobley
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

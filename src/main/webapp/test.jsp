@@ -1,7 +1,8 @@
 <%-- 
   Document   : test
   Created on : Sep 29, 2014, 9:16:48 AM
-  Author   : Administrator
+  Author   : Andy Cobley
+  Apparently, this file serves no purpose.
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

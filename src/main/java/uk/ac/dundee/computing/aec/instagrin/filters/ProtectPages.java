@@ -30,8 +30,8 @@ import javax.servlet.http.HttpSession;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
 /**
- *
- * @author Administrator
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 @WebFilter(
   filterName = "ProtectPages",

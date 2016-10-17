@@ -20,6 +20,8 @@ import java.util.Set;
 
 /**
  * Singleton class allowing other classes to acess a cassandra cluster.
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 public final class CassandraHosts
 {

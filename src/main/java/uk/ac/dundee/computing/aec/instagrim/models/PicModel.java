@@ -43,8 +43,12 @@ import org.imgscalr.Scalr;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
-//import uk.ac.dundee.computing.aec.stores.TweetStore;
 
+//import uk.ac.dundee.computing.aec.stores.TweetStore;
+/**
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
+ */
 public class PicModel
 {
   

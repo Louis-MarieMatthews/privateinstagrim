@@ -37,6 +37,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
 /**
  * Servlet implementation class Image
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 @WebServlet(
   urlPatterns = {
@@ -48,7 +50,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
   }
 )
 @MultipartConfig
-
 public class Image extends HttpServlet
 {
   private static final long serialVersionUID = 1L;

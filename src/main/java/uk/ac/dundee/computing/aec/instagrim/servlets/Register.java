@@ -23,7 +23,8 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
  *
- * @author Administrator
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 @WebServlet(
   name = "Register",

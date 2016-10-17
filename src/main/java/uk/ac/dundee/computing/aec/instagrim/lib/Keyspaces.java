@@ -19,6 +19,10 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.SimpleStatement;
 
+/**
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
+ */
 public final class Keyspaces
 {
   public Keyspaces()

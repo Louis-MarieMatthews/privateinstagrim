@@ -16,7 +16,7 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  * Objects of this class are used to store authentification information in the 
  * session.
  * 
- * @author Andy Cobley
+ * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
 public class LoggedIn

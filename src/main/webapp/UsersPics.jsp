@@ -1,7 +1,8 @@
 <%-- 
   Document   : UsersPics
   Created on : Sep 24, 2014, 2:52:48 PM
-  Author   : Administrator
+  Author   : Andy Cobley
+  Page used by the servlet Image. Shouldn't be accessed directly.
 --%>
 
 <%@page import="java.util.*"%>
@@ -42,7 +43,7 @@
           Pic p = (Pic) iterator.next();
 
       %>
-      <a href="/Instagrim/Image/<%=p.getSUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getSUUID()%>"></a><br/><%
+      <a href="/Instagrim/Image/<%=p.getStringUUID()%>" ><img src="/Instagrim/Thumb/<%=p.getStringUUID()%>"></a><br/><%
 
           }
         }

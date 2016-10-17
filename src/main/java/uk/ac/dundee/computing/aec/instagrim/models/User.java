@@ -24,7 +24,8 @@ import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 /**
  *
- * @author Administrator
+ * @author Andy Cobley, Louis-Marie Matthews
+ * @version 1.0.1
  */
 public class User
 {
@@ -39,10 +40,9 @@ public class User
   
   public boolean registerUser(String username, String password)
   {
-    AeSimpleSHA1 sha1handler = new AeSimpleSHA1();
     String encodedPassword = null;
     try {
-      encodedPassword = sha1handler.SHA1(password);
+      encodedPassword = AeSimpleSHA1.SHA1(password);
     } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
       System.out.println("Can't check your password");
       return false;
