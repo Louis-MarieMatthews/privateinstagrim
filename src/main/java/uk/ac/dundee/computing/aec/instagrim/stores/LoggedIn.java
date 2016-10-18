@@ -21,20 +21,15 @@ package uk.ac.dundee.computing.aec.instagrim.stores;
  */
 public class LoggedIn
 {
-  private boolean loggedIn = false;
-  private String username = null;
+  private boolean loggedIn;
+  private String username;
   
   
   
-  public void LoggedIn()
+  public LoggedIn(boolean loggedIn, String username)
   {
-  }
-  
-  
-  
-  public void setUsername(String name)
-  {
-    this.username = name;
+    this.loggedIn = loggedIn;
+    this.username = username;
   }
   
   
@@ -46,29 +41,28 @@ public class LoggedIn
   
   
   
-  public void setLoggedIn()
+  public boolean isLoggedIn()
+  {
+    return loggedIn;
+  }
+  
+  
+  
+  public void logIn()
   {
     loggedIn = true;
   }
   
   
   
-  public void setLoggedOut()
-  {
+  public void logOut() {
     loggedIn = false;
   }
   
   
   
-  public void setLoginState(boolean logedIn)
+  public void setUsername(String username)
   {
-    this.loggedIn = logedIn;
-  }
-  
-  
-  
-  public boolean getLoggedIn()
-  {
-    return loggedIn;
+    this.username = username;
   }
 }

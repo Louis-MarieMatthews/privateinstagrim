@@ -51,16 +51,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  */
 public class PicModel
 {
-  
-  
-  
-  public void PicModel()
-  {
-  }
-  
-  
-  
-  public void insertPic(byte[] b, String type, String name, String user)
+  public static void insertPic(byte[] b, String type, String name, String user)
   {
     try {
       String types[] = Convertors.splitPath(type);
@@ -73,10 +64,10 @@ public class PicModel
       FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + picid));
 
       output.write(b);
-      byte[] thumbb = picresize(picid.toString(), types[1]);
+      byte[] thumbb = picResize(picid.toString(), types[1]);
       int thumblength = thumbb.length;
       ByteBuffer thumbbuf = ByteBuffer.wrap(thumbb);
-      byte[] processedb = picdecolour(picid.toString(), types[1]);
+      byte[] processedb = picDecolour(picid.toString(), types[1]);
       ByteBuffer processedbuf = ByteBuffer.wrap(processedb);
       int processedlength = processedb.length;
       Session session = CassandraHosts.getCluster().connect("instagrim");
@@ -98,7 +89,7 @@ public class PicModel
   
   
   
-  public byte[] picresize(String picid, String type)
+  public static byte[] picResize(String picid, String type)
   {
     try {
       BufferedImage bi = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
@@ -118,7 +109,7 @@ public class PicModel
   
   
   
-  public byte[] picdecolour(String picid, String type)
+  public static byte[] picDecolour(String picid, String type)
   {
     try {
       BufferedImage bi = ImageIO.read(new File("/var/tmp/instagrim/" + picid));
@@ -155,7 +146,7 @@ public class PicModel
   
   
   
-  public java.util.LinkedList<Pic> getPicsForUser(String user)
+  public static java.util.LinkedList<Pic> getPicsForUser(String user)
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
     Session session = CassandraHosts.getCluster().connect("instagrim");
@@ -183,7 +174,14 @@ public class PicModel
   
   
   
-  public Pic getPic(int imageType, java.util.UUID picId)
+  /**
+   * 
+   * 
+   * @param imageType
+   * @param picId
+   * @return 
+   */
+  public static Pic getPic(int imageType, java.util.UUID picId)
   {
     Session session = CassandraHosts.getCluster().connect("instagrim");
     ByteBuffer bImage = null;
@@ -193,7 +191,11 @@ public class PicModel
       Convertors convertor = new Convertors();
       ResultSet rs = null;
       PreparedStatement ps = null;
-
+      
+      
+      /**
+       * TODO: What if the given type isn't correct?
+       */
       if (imageType == Convertors.DISPLAY_IMAGE) {
         ps = session.prepare("select image,imagelength,type from pics where picid = ?");
       }

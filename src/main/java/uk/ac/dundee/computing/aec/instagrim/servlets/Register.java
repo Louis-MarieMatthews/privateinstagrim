@@ -32,9 +32,6 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
 )
 public class Register extends HttpServlet
 {
-  
-  
-  
   public void init(ServletConfig config)
     throws ServletException
   {
@@ -61,9 +58,8 @@ public class Register extends HttpServlet
   {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-
-    User us = new User();
-    us.registerUser(username, password);
+    
+    User.registerUser(username, password);
 
     response.sendRedirect("/Instagrim");
   }

@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
@@ -39,9 +38,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 )
 public class Login extends HttpServlet
 {
-  
-  
-  
   public void init(ServletConfig config)
     throws ServletException
   {
@@ -64,15 +60,11 @@ public class Login extends HttpServlet
   {
     String username = request.getParameter("username");
     String password = request.getParameter("password");
-
-    User us = new User();
-    boolean isValid = us.isValidUser(username, password);
+    
     HttpSession session = request.getSession();
     System.out.println("Session in servlet " + session);
-    if (isValid) {
-      LoggedIn lg = new LoggedIn();
-      lg.setLoggedIn();
-      lg.setUsername(username);
+    if (User.isValidUser(username, password)) {
+      LoggedIn lg = new LoggedIn(true, username);
       //request.setAttribute("LoggedIn", lg);
 
       session.setAttribute("LoggedIn", lg);
@@ -81,22 +73,9 @@ public class Login extends HttpServlet
       rd.forward(request, response);
 
     }
-    else {
+    else { // if the entered details are not correct
       response.sendRedirect("/Instagrim/login.jsp");
     }
 
   }
-  
-  
-  
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo()
-  {
-    return "Short description";
-  }// </editor-fold>
 }

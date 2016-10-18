@@ -13,10 +13,6 @@
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Metadata;
-import com.datastax.driver.core.Host;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Singleton class allowing other classes to acess a cassandra cluster.
@@ -27,12 +23,6 @@ public final class CassandraHosts
 {
   private static Cluster cluster;
   private final static String HOST = "127.0.0.1";  //at least one starting point to talk to
-  
-  
-  
-  public CassandraHosts()
-  { 
-  }
   
   
   
@@ -48,7 +38,7 @@ public final class CassandraHosts
   
   
   
-  public void close()
+  public static void close()
   {
     cluster.close();
   }

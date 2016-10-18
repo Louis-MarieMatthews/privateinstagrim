@@ -23,22 +23,14 @@ import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
 /**
- *
+ * A model class to acess database-stored users.
+ * 
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
 public class User
 {
-  
-  
-  
-  public User()
-  {
-  }
-  
-  
-  
-  public boolean registerUser(String username, String password)
+  public static boolean registerUser(String username, String password)
   {
     String encodedPassword = null;
     try {
@@ -61,7 +53,7 @@ public class User
   
   
   
-  public boolean isValidUser(String username, String password)
+  public static boolean isValidUser(String username, String password)
   {
     String encodedPassword = null;
     try {

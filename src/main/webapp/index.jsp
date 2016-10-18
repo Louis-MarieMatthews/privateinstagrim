@@ -1,7 +1,7 @@
 <%-- 
   Document   : index
   Created on : Sep 28, 2014, 7:01:44 PM
-  Author   : Administrator
+  Author   : Andy Cobley
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,7 +25,7 @@
             LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
             if (lg != null) {
               String username = lg.getUsername();
-              if (lg.getLoggedIn()) {
+              if (lg.isLoggedIn()) {
           %>
         <li><a href="/Instagrim/Images/<%=lg.getUsername()%>">Your Images</a></li>
           <%

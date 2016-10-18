@@ -16,6 +16,9 @@ import java.net.URLDecoder;
 import java.util.UUID;
 
 /**
+ * A class providing only static methods and constants. It only contains two
+ * methods actually used by other classes besides its constants.
+ * 
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
@@ -27,13 +30,11 @@ public final class Convertors
   
   
   
-  public void Convertors()
-  {
-
-  }
-  
-  
-  
+  /**
+   * Unused.
+   * 
+   * @return 
+   */
   public static UUID getTimeUUID()
   {
     return UUID.fromString(new com.eaio.uuid.UUID().toString());
@@ -41,6 +42,12 @@ public final class Convertors
   
   
   
+  /**
+   * Unused.
+   * 
+   * @param uuid
+   * @return 
+   */
   public static byte[] asByteArray(UUID uuid)
   {
     long msb = uuid.getMostSignificantBits();
@@ -59,6 +66,12 @@ public final class Convertors
   
   
   
+  /**
+   * Unused. The Long class already provide a similar method.
+   * 
+   * @param value
+   * @return 
+   */
   public static byte[] longToByteArray(long value)
   {
     byte[] buffer = new byte[8]; //longs are 8 bytes I believe
@@ -73,6 +86,12 @@ public final class Convertors
   
   
   
+  /**
+   * Unused and unecessary. The Byte class already provide a similar method.
+   * 
+   * @param buffer
+   * @return 
+   */
   public static long byteArrayToLong(byte[] buffer)
   {
     long value = 0;
@@ -88,6 +107,11 @@ public final class Convertors
   
   
   
+  /**
+   * Unused.
+   * 
+   * @param buffer 
+   */
   public static void displayByteArrayAsHex(byte[] buffer)
   {
     int byteArrayLength = buffer.length;
@@ -101,7 +125,10 @@ public final class Convertors
   
   
   
-  //From: http://www.captain.at/howto-java-convert-binary-data.php
+  /**
+   * Unused.
+   * From: http://www.captain.at/howto-java-convert-binary-data.php
+   */
   public static long arr2long(byte[] arr, int start)
   {
     int i = 0;

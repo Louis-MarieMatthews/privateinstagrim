@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
@@ -53,7 +52,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class Image extends HttpServlet
 {
   private static final long serialVersionUID = 1L;
-  private HashMap commandsMap = new HashMap();
+  private static final int BYTE_BLOCK = 8192;
+  
+  private final HashMap commandsMap;
   
   
   
@@ -64,6 +65,7 @@ public class Image extends HttpServlet
   {
     super();
     // TODO Auto-generated constructor stub
+    commandsMap = new HashMap();
     commandsMap.put("Image", 1);
     commandsMap.put("Images", 2);
     commandsMap.put("Thumb", 3);
@@ -72,6 +74,7 @@ public class Image extends HttpServlet
   
   
   
+  @Override
   public void init(ServletConfig config)
     throws ServletException
   {
@@ -89,7 +92,8 @@ public class Image extends HttpServlet
   {
     // TODO Auto-generated method stub
     String[] args = Convertors.splitPath(request.getRequestURI());
-    for(int i = 0; i < args.length; i++) {
+    for (String arg : args) {
+      ;
     }
     int command;
     try {
@@ -114,12 +118,20 @@ public class Image extends HttpServlet
   }
   
   
-  
+  /**
+   * Forward to response to UsersPics.jsp along with the images uploaded by a
+   * user UsersPics.jsp will display.
+   * 
+   * @param user the use whose images will be displayed
+   * @param request
+   * @param response
+   * @throws ServletException
+   * @throws IOException 
+   */
   private void displayImageList(String user, HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
-    PicModel tm = new PicModel();
-    java.util.LinkedList<Pic> lsPics = tm.getPicsForUser(user);
+    java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
     request.setAttribute("Pics", lsPics);
     rd.forward(request, response);
@@ -127,12 +139,19 @@ public class Image extends HttpServlet
   
   
   
+  /**
+   * Set the response to display to given image.
+   * 
+   * @param type the type of the image to display (thumbnail, image, processed...)
+   * @param image the image to display
+   * @param response the response which will display the image
+   * @throws ServletException
+   * @throws IOException 
+   */
   private void displayImage(int type, String image, HttpServletResponse response)
     throws ServletException, IOException
   {
-    PicModel tm = new PicModel();
-
-    Pic p = tm.getPic(type, java.util.UUID.fromString(image));
+    Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
 
     OutputStream out = response.getOutputStream();
 
@@ -141,7 +160,16 @@ public class Image extends HttpServlet
     //out.write(Image);
     InputStream is = new ByteArrayInputStream(p.getBytes());
     BufferedInputStream input = new BufferedInputStream(is);
-    byte[] buffer = new byte[8192];
+    byte[] buffer = new byte[BYTE_BLOCK];
+    
+    /**
+     * Hidrate the byte array buffer from the BufferedInputStram input.
+     * input reads its bytes block by block, returns the size of the block 
+     * it just read everytime and store what it just read in buffer.
+     * While this size isn't 0 nor -1, that means the  bytes were read correctly.
+     * Between each reading, the result is added to the response OutputStream.
+     * See: https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html#read(byte[])
+     */
     for (int length = 0; (length = input.read(buffer)) > 0;) {
       out.write(buffer, 0, length);
     }
@@ -150,6 +178,14 @@ public class Image extends HttpServlet
   
   
   
+  /**
+   * Adds a new pic to the website.
+   * 
+   * @param request
+   * @param response
+   * @throws ServletException
+   * @throws IOException 
+   */
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
@@ -164,7 +200,7 @@ public class Image extends HttpServlet
       HttpSession session = request.getSession();
       LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
       String username = "majed";
-      if (lg.getLoggedIn()) {
+      if (lg.isLoggedIn()) {
         username = lg.getUsername();
       }
       if (i > 0) {
@@ -186,7 +222,7 @@ public class Image extends HttpServlet
   private void error(String mess, HttpServletResponse response)
     throws ServletException, IOException
   {
-    PrintWriter out = null;
+    PrintWriter out;
     out = new PrintWriter(response.getOutputStream());
     out.println("<h1>You have a na error in your input</h1>");
     out.println("<h2>" + mess + "</h2>");
