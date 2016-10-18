@@ -19,6 +19,7 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
@@ -35,6 +36,7 @@ public class User
   
   
   public static boolean registerUser(String username, String password)
+    throws NoDatabaseConnectionException
   {
     String encodedPassword = null;
     try {
@@ -43,7 +45,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    Session session = CassandraHosts.getCluster().connect("instagrim");
+      Session session = CassandraHosts.getCluster().connect("instagrim");
     PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
 
     BoundStatement boundStatement = new BoundStatement(ps);
@@ -58,6 +60,7 @@ public class User
   
   
   public static boolean isValidUser(String username, String password)
+    throws NoDatabaseConnectionException
   {
     String encodedPassword = null;
     try {

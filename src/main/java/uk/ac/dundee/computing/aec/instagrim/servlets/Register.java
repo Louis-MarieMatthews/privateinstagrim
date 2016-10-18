@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
@@ -59,7 +60,13 @@ public class Register extends HttpServlet
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     
-    User.registerUser(username, password);
+    
+    try {
+      User.registerUser(username, password);
+    } catch (NoDatabaseConnectionException e) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+      return;
+    }
 
     response.sendRedirect("/Instagrim");
   }

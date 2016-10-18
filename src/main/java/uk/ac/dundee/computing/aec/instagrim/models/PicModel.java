@@ -39,6 +39,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
@@ -54,6 +55,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class PicModel
 {
   public static void insertPic(byte[] b, String type, String name, String user)
+    throws NoDatabaseConnectionException
   {
     try {
       String types[] = Convertors.splitPath(type);
@@ -149,6 +151,7 @@ public class PicModel
   
   
   public static java.util.LinkedList<Pic> getPicsForUser(String user)
+    throws NoDatabaseConnectionException
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
     Session session = CassandraHosts.getCluster().connect("instagrim");
@@ -184,6 +187,7 @@ public class PicModel
    * @return 
    */
   public static Pic getPic(int imageType, java.util.UUID picId)
+    throws NoDatabaseConnectionException
   {
     Session session = CassandraHosts.getCluster().connect("instagrim");
     ByteBuffer bImage = null;

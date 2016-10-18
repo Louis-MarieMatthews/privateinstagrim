@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
@@ -63,18 +64,23 @@ public class Login extends HttpServlet
     
     HttpSession session = request.getSession();
     System.out.println("Session in servlet " + session);
-    if (User.isValidUser(username, password)) {
-      LoggedIn lg = new LoggedIn(true, username);
-      //request.setAttribute("LoggedIn", lg);
+    try {
+      if (User.isValidUser(username, password)) {
+        LoggedIn lg = new LoggedIn(true, username);
+        //request.setAttribute("LoggedIn", lg);
 
-      session.setAttribute("LoggedIn", lg);
-      System.out.println("Session in servlet " + session);
-      RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-      rd.forward(request, response);
+        session.setAttribute("LoggedIn", lg);
+        System.out.println("Session in servlet " + session);
+        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+        rd.forward(request, response);
 
-    }
-    else { // if the entered details are not correct
-      response.sendRedirect("/Instagrim/login.jsp");
+      }
+      else { // if the entered details are not correct
+        response.sendRedirect("/Instagrim/login.jsp");
+      }
+    } catch (NoDatabaseConnectionException e) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+      return;
     }
 
   }

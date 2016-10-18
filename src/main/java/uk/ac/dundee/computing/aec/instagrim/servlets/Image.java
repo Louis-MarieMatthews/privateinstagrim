@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
@@ -106,19 +107,38 @@ public class Image extends HttpServlet
       }
       switch (command) {
         case 1:
-          displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
+          try {
+            displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
+          } catch (NoDatabaseConnectionException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+            return;
+          }
           break;
         case 2:
-          displayImageList(args[2], request, response);
+          try {
+            displayImageList(args[2], request, response);
+          } catch (NoDatabaseConnectionException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+          }
           break;
         case 3:
+          try {
           displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
+          } catch (NoDatabaseConnectionException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+            return;
+          }
           break;
         default:
           error("Bad Operator", response);
       }
     } else {
-      displayImageList(User.DEFAULT_USERNAME, request, response);
+      try {
+        displayImageList(User.DEFAULT_USERNAME, request, response);
+      } catch (NoDatabaseConnectionException e) {
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+        return;
+      }
     }
   }
   
@@ -134,7 +154,7 @@ public class Image extends HttpServlet
    * @throws IOException 
    */
   private void displayImageList(String user, HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException
+    throws NoDatabaseConnectionException, ServletException, IOException
   {
     java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
@@ -155,7 +175,7 @@ public class Image extends HttpServlet
    */
   private void displayImage(int type, String image, HttpServletRequest request,
                             HttpServletResponse response)
-    throws ServletException, IOException
+    throws NoDatabaseConnectionException, ServletException, IOException
   {
     try {
       Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
@@ -223,7 +243,11 @@ public class Image extends HttpServlet
         is.read(b);
         System.out.println("Length : " + b.length);
         PicModel tm = new PicModel();
-        tm.insertPic(b, type, filename, username);
+        try {
+          tm.insertPic(b, type, filename, username);
+        } catch (NoDatabaseConnectionException e) {
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+        }
 
         is.close();
       }

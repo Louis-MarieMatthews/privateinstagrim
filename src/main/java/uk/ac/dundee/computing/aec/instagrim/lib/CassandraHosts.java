@@ -13,6 +13,8 @@
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.exceptions.NoHostAvailableException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 
 /**
  * Singleton class allowing other classes to acess a cassandra cluster.
@@ -27,13 +29,28 @@ public final class CassandraHosts
   
   
   public static Cluster getCluster()
+    throws NoDatabaseConnectionException
   {
-    if ( cluster == null ) {
+    if (cluster == null) {
       System.out.println("getCluster");
       cluster = Cluster.builder().addContactPoint(HOST).build();
       Keyspaces.setUpKeyspaces(cluster);
     }
-    return cluster;
+    if ( isClusterWorking() ) {
+      return cluster;
+    } else {
+      throw new NoDatabaseConnectionException();
+    }
+  }
+  
+  
+  
+  private static boolean isClusterWorking() {
+    if ( cluster != null & ! cluster.isClosed() ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   
   
