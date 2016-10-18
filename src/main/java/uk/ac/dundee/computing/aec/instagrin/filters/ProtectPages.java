@@ -28,6 +28,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
 /**
@@ -90,7 +91,6 @@ public class ProtectPages
     if (DEBUG) {
       log("ProtectPages:doFilter()");
     }
-
     doBeforeProcessing(request, response);
     System.out.println("Doing filter");
     HttpServletRequest httpReq = (HttpServletRequest) request;
