@@ -106,13 +106,13 @@ public class Image extends HttpServlet
       }
       switch (command) {
         case 1:
-          displayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
+          displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
           break;
         case 2:
           displayImageList(args[2], request, response);
           break;
         case 3:
-          displayImage(Convertors.DISPLAY_THUMB, args[2], response);
+          displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
           break;
         default:
           error("Bad Operator", response);
@@ -153,32 +153,37 @@ public class Image extends HttpServlet
    * @throws ServletException
    * @throws IOException 
    */
-  private void displayImage(int type, String image, HttpServletResponse response)
+  private void displayImage(int type, String image, HttpServletRequest request,
+                            HttpServletResponse response)
     throws ServletException, IOException
   {
-    Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
-
-    OutputStream out = response.getOutputStream();
-
-    response.setContentType(p.getType());
-    response.setContentLength(p.getLength());
-    //out.write(Image);
-    InputStream is = new ByteArrayInputStream(p.getBytes());
-    BufferedInputStream input = new BufferedInputStream(is);
-    byte[] buffer = new byte[BYTE_BLOCK];
-    
-    /**
-     * Hidrate the byte array buffer from the BufferedInputStram input.
-     * input reads its bytes block by block, returns the size of the block 
-     * it just read everytime and store what it just read in buffer.
-     * While this size isn't 0 nor -1, that means the  bytes were read correctly.
-     * Between each reading, the result is added to the response OutputStream.
-     * See: https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html#read(byte[])
-     */
-    for (int length = 0; (length = input.read(buffer)) > 0;) {
-      out.write(buffer, 0, length);
+    try {
+      Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
+      OutputStream out = response.getOutputStream();
+      response.setContentType(p.getType());
+      response.setContentLength(p.getLength());
+      //out.write(Image);
+      InputStream is = new ByteArrayInputStream(p.getBytes());
+      BufferedInputStream input = new BufferedInputStream(is);
+      byte[] buffer = new byte[BYTE_BLOCK];
+      /**
+       * Hidrate the byte array buffer from the BufferedInputStram input.
+       * input reads its bytes block by block, returns the size of the block 
+       * it just read everytime and store what it just read in buffer.
+       * While this size isn't 0 nor -1, that means the  bytes were read correctly.
+       * Between each reading, the result is added to the response OutputStream.
+       * See: https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html#read(byte[])
+       */
+      for (int length = 0; (length = input.read(buffer)) > 0;) {
+        out.write(buffer, 0, length);
+      }
+      out.close();
+    } catch(IllegalArgumentException exception) {
+      response.setContentType("text/html");
+      RequestDispatcher rd = request.getRequestDispatcher("/ImageNotFound.jsp");
+      rd.forward(request, response);
     }
-    out.close();
+
   }
   
   
