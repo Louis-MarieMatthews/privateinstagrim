@@ -18,8 +18,10 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
@@ -36,8 +38,11 @@ public class User
   
   
   public static boolean registerUser(String username, String password)
-    throws NoDatabaseConnectionException
+    throws NoDatabaseConnectionException, UsernameNotAsciiException
   {
+    if ( ! Charset.forName("US-ASCII").newEncoder().canEncode(username)) {
+      throw new UsernameNotAsciiException();
+    }
     String encodedPassword = null;
     try {
       encodedPassword = AeSimpleSHA1.SHA1(password);

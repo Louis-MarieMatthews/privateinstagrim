@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -105,10 +106,12 @@ public class Image extends HttpServlet
         error("Bad Operator", response);
         return;
       }
+      String arg2 = URLDecoder.decode(args[2], "UTF-8-");
+      System.out.println(arg2);
       switch (command) {
         case 1:
           try {
-            displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
+            displayImage(Convertors.DISPLAY_PROCESSED, arg2, request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
@@ -116,14 +119,14 @@ public class Image extends HttpServlet
           break;
         case 2:
           try {
-            displayImageList(args[2], request, response);
+            displayImageList(arg2, request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
           }
           break;
         case 3:
           try {
-          displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
+          displayImage(Convertors.DISPLAY_THUMB, arg2, request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;

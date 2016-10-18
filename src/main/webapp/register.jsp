@@ -25,6 +25,13 @@
 
     <article>
       <h3>Register as user</h3>
+        <%
+          if ( request.getAttribute("details_error") != null ) {
+            %>
+            <p><%=request.getAttribute("details_error") %></p>
+            <%
+          }  
+        %>
       <form method="POST"  action="Register">
         <ul>
           <li>User Name <input type="text" name="username"></li>
