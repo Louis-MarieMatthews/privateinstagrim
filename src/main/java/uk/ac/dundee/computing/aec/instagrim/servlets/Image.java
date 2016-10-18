@@ -159,6 +159,9 @@ public class Image extends HttpServlet
   {
     try {
       Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
+      if ( p == null ) {
+        throw new IllegalArgumentException();
+      }
       OutputStream out = response.getOutputStream();
       response.setContentType(p.getType());
       response.setContentLength(p.getLength());
