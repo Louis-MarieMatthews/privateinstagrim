@@ -46,6 +46,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
 /**
+ * Contains methods to acess and insert images from/into the database.
+ * 
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */

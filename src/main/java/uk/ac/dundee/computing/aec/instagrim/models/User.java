@@ -30,6 +30,10 @@ import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
  */
 public class User
 {
+  public final static String DEFAULT_USERNAME = "majed";
+  
+  
+  
   public static boolean registerUser(String username, String password)
   {
     String encodedPassword = null;

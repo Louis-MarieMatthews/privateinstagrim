@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
+import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -95,25 +96,29 @@ public class Image extends HttpServlet
     for (String arg : args) {
       ;
     }
-    int command;
-    try {
-      command = (Integer) commandsMap.get(args[1]);
-    } catch (Exception et) {
-      error("Bad Operator", response);
-      return;
-    }
-    switch (command) {
-      case 1:
-        displayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
-        break;
-      case 2:
-        displayImageList(args[2], request, response);
-        break;
-      case 3:
-        displayImage(Convertors.DISPLAY_THUMB, args[2], response);
-        break;
-      default:
+    if (args.length>2) {
+      int command;
+      try {
+        command = (Integer) commandsMap.get(args[1]);
+      } catch (Exception et) {
         error("Bad Operator", response);
+        return;
+      }
+      switch (command) {
+        case 1:
+          displayImage(Convertors.DISPLAY_PROCESSED, args[2], response);
+          break;
+        case 2:
+          displayImageList(args[2], request, response);
+          break;
+        case 3:
+          displayImage(Convertors.DISPLAY_THUMB, args[2], response);
+          break;
+        default:
+          error("Bad Operator", response);
+      }
+    } else {
+      displayImageList(User.DEFAULT_USERNAME, request, response);
     }
   }
   
@@ -199,9 +204,11 @@ public class Image extends HttpServlet
       int i = is.available();
       HttpSession session = request.getSession();
       LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-      String username = "majed";
+      String username;
       if (lg.isLoggedIn()) {
         username = lg.getUsername();
+      } else {
+        username = User.DEFAULT_USERNAME;
       }
       if (i > 0) {
         byte[] b = new byte[i + 1];
