@@ -107,12 +107,10 @@ public class Image extends HttpServlet
         error("Bad Operator", response);
         return;
       }
-      String arg2 = URLDecoder.decode(args[2], "UTF-8-");
-      System.out.println(arg2);
       switch (command) {
         case 1:
           try {
-            displayImage(Convertors.DISPLAY_PROCESSED, arg2, request, response);
+            displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
@@ -120,14 +118,14 @@ public class Image extends HttpServlet
           break;
         case 2:
           try {
-            displayImageList(arg2, request, response);
+            displayImageList(args[2], request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
           }
           break;
         case 3:
           try {
-          displayImage(Convertors.DISPLAY_THUMB, arg2, request, response);
+          displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
           } catch (NoDatabaseConnectionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
@@ -161,7 +159,7 @@ public class Image extends HttpServlet
     throws NoDatabaseConnectionException, ServletException, IOException
   {
     java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
-    RequestDispatcher rd = request.getRequestDispatcher("/UsersPics.jsp");
+    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersPics.jsp");
     request.setAttribute("Pics", lsPics);
     rd.forward(request, response);
   }
@@ -208,7 +206,7 @@ public class Image extends HttpServlet
     }
     catch(IllegalArgumentException|InvalidImageTypeException exception) {
       response.setContentType("text/html");
-      RequestDispatcher rd = request.getRequestDispatcher("/ImageNotFound.jsp");
+      RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/ImageNotFound.jsp");
       rd.forward(request, response);
     }
 
