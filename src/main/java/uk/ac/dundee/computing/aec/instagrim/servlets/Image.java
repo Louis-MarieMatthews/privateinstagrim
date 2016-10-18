@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
@@ -204,7 +205,8 @@ public class Image extends HttpServlet
         out.write(buffer, 0, length);
       }
       out.close();
-    } catch(IllegalArgumentException exception) {
+    }
+    catch(IllegalArgumentException|InvalidImageTypeException exception) {
       response.setContentType("text/html");
       RequestDispatcher rd = request.getRequestDispatcher("/ImageNotFound.jsp");
       rd.forward(request, response);

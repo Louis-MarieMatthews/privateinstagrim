@@ -39,6 +39,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
+import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
@@ -187,7 +188,7 @@ public class PicModel
    * @return 
    */
   public static Pic getPic(int imageType, java.util.UUID picId)
-    throws NoDatabaseConnectionException
+    throws InvalidImageTypeException, NoDatabaseConnectionException
   {
     Session session = CassandraHosts.getCluster().connect("instagrim");
     ByteBuffer bImage = null;
@@ -210,6 +211,8 @@ public class PicModel
       }
       else if (imageType == Convertors.DISPLAY_PROCESSED) {
         ps = session.prepare("select processed,processedlength,type from pics where picid = ?");
+      } else {
+        throw new InvalidImageTypeException();
       }
       BoundStatement boundStatement = new BoundStatement(ps);
       rs = session.execute( // this is where the query is executed
