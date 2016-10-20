@@ -1,7 +1,7 @@
 <%-- 
   Document   : upload
   Created on : Sep 22, 2014, 6:31:50 PM
-  Author   : Andy Cobley
+  Author   : Andy Cobley, Louis-Marie Matthews
 --%>
 
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
@@ -9,43 +9,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Instagrim</title>
-    <link rel="stylesheet" type="text/css" href="Styles.css" />
+    <% request.setAttribute("pageName", "Upload"); %>
+    <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
-    <h1>InstaGrim ! </h1>
-    <h2>Your world in Black and White</h2>
-      <%
-          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-          if (lg != null) {
-            String username = lg.getUsername();
-            if (lg.isLoggedIn())
-      %>
-      <p>Hello, <%= lg.getUsername() %>.</p>
-      <%
-          }
-      %>
-    <nav>
-      <ul>
-        <li class="nav"><a href="upload.jsp">Upload</a></li>
-        <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
-      </ul>
-    </nav>
+    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
+    <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
-    <article>
+    <main>
       <h3>File Upload</h3>
       <form method="POST" enctype="multipart/form-data" action="Image">
         <label for="upfile">File to upload: </label><input type="file" name="upfile" id="upfile" required><br/>
         <br/>
         <input type="submit" value="Press"> to upload the file!
       </form>
-
-    </article>
-    <footer>
-      <ul>
-        <li class="footer"><a href="/Instagrim">Home</a></li>
-      </ul>
-    </footer>
-  </body>
+    </main>
+    
+    <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>
+</body>
 </html>

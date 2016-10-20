@@ -1,7 +1,7 @@
 <%-- 
   Document   : UsersPics
   Created on : Sep 24, 2014, 2:52:48 PM
-  Author   : Andy Cobley
+  Author   : Andy Cobley, Louis-Marie Matthews
   Page used by the servlet Image. Shouldn't be accessed directly.
 --%>
 
@@ -11,34 +11,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Instagrim</title>
-    <link rel="stylesheet" type="text/css" href="/Instagrim/Styles.css" />
+    <% request.setAttribute("pageName", "Your Pictures"); %>
+    <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
-    <header>
-      <h1>InstaGrim ! </h1>
-      <h2>Your world in Black and White</h2>
-      <%
-          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-          if (lg != null) {
-            String username = lg.getUsername();
-            if (lg.isLoggedIn())
-      %>
-      <p>Hello, <%= lg.getUsername() %>.</p>
-      <%
-          }
-      %>
-    </header>
-
-    <nav>
-      <ul>
-        <li class="nav"><a href="/Instagrim/upload.jsp">Upload</a></li>
-        <li class="nav"><a href="/Instagrim/Images/majed">Sample Images</a></li>
-      </ul>
-    </nav>
-
-    <article>
+    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
+    <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
+    
+    <main>
       <h1>Your Pics</h1>
       <%
         java.util.LinkedList<Pic> lsPics = (java.util.LinkedList<Pic>) request.getAttribute("Pics");
@@ -57,12 +37,9 @@
 
           }
         }
-        %>
-    </article>
-    <footer>
-      <ul>
-        <li class="footer"><a href="/Instagrim">Home</a></li>
-      </ul>
-    </footer>
+      %>
+    </main>
+    
+    <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>
   </body>
 </html>

@@ -12,6 +12,9 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.stores;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Objects of this class are used to store authentification information in the 
  * session.
@@ -64,5 +67,26 @@ public class LoggedIn
   public void setUsername(String username)
   {
     this.username = username;
+  }
+  
+  
+  
+  public static String getUsername(ServletRequest request) {
+    LoggedIn lg = (LoggedIn) ((HttpServletRequest)request).getSession()
+      .getAttribute("LoggedIn");
+    return lg.getUsername();
+  }
+  
+  
+  
+  public static boolean isLoggedIn(ServletRequest request) {
+    LoggedIn lg = (LoggedIn) ((HttpServletRequest)request).getSession()
+      .getAttribute("LoggedIn");
+    if ( lg != null ) {
+      if ( lg.isLoggedIn() ) {
+        return true;
+      }
+    }
+    return false;
   }
 }

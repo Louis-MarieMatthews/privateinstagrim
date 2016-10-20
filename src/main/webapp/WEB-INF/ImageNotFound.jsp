@@ -9,22 +9,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>The image has not been found</title>
+    <% request.setAttribute("pageName", "Image not found"); %>
+    <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
-    <nav>
-      <h1>The requested image has not been found</h1>
-      <%
-          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-          if (lg != null) {
-            String username = lg.getUsername();
-            if (lg.isLoggedIn())
-      %>
-      <p>Hello, <%= lg.getUsername() %>.</p>
-      <%
-          }
-      %>
-    </nav>
+    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
+    <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
+
+    <main>
+      <h1>The requested image has not been found.</h1>
+    </main>
+    
+    <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>
   </body>
 </html>

@@ -1,0 +1,10 @@
+<%@page pageEncoding="UTF-8" %>
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
+
+<header>
+      <h1>Instagrim</h1>
+      <h2>Your world in Black and White</h2>
+      <% if ( LoggedIn.isLoggedIn(request) ) { %>
+      <p>Hello, <%= LoggedIn.getUsername(request) %>.</p>
+      <% } %>
+</header>

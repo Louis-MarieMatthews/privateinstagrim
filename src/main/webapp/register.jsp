@@ -1,29 +1,21 @@
 <%-- 
   Document   : register.jsp
   Created on : Sep 28, 2014, 6:29:51 PM
-  Author   : Administrator
+  Author   : Andy Cobley, Louis-Marie Matthews
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Instagrim</title>
-    <link rel="stylesheet" type="text/css" href="Styles.css" />
+    <% request.setAttribute("pageName", "Register"); %>
+    <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
-    <header>
-      <h1>InstaGrim ! </h1>
-      <h2>Your world in Black and White</h2>
-    </header>
-    <nav>
-      <ul>
-        <li><a href="/Instagrim/Images/majed">Sample Images</a></li>
-      </ul>
-    </nav>
+    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
+    <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
-    <article>
+    <main>
       <h3>Register as user</h3>
         <%
           if ( request.getAttribute("details_error") != null ) {
@@ -41,11 +33,8 @@
         <input type="submit" value="Regidter"> 
       </form>
 
-    </article>
-    <footer>
-      <ul>
-        <li class="footer"><a href="/Instagrim">Home</a></li>
-      </ul>
-    </footer>
+    </main>
+    
+    <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>
   </body>
 </html>
