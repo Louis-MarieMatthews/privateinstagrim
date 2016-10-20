@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -229,18 +228,15 @@ public class Image extends HttpServlet
       System.out.println("Part Name " + part.getName());
 
       String type = part.getContentType();
+      System.out.println( "Image.doPost(…): type = " + part );
+      
       String filename = part.getSubmittedFileName();
 
       InputStream is = request.getPart(part.getName()).getInputStream();
       int i = is.available();
       HttpSession session = request.getSession();
       LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
-      String username;
-      if (lg.isLoggedIn()) {
-        username = lg.getUsername();
-      } else {
-        username = User.DEFAULT_USERNAME;
-      }
+      String username = LoggedIn.getUsername(request);
       if (i > 0) {
         byte[] b = new byte[i + 1];
         is.read(b);
@@ -248,10 +244,10 @@ public class Image extends HttpServlet
         PicModel tm = new PicModel();
         try {
           tm.insertPic(b, type, filename, username);
+          request.setAttribute( "message", "Your image has been uploaded sucessfully." );
         } catch (NoDatabaseConnectionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         }
-
         is.close();
       }
       RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");

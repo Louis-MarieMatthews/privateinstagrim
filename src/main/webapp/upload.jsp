@@ -18,6 +18,13 @@
 
     <main>
       <h3>File Upload</h3>
+        <%
+          if ( request.getAttribute("message") != null ) {
+            %>
+            <p><%=request.getAttribute("message") %></p>
+            <%
+          }  
+        %>
       <form method="POST" enctype="multipart/form-data" action="Image">
         <label for="upfile">File to upload: </label><input type="file" name="upfile" id="upfile" required><br/>
         <br/>
