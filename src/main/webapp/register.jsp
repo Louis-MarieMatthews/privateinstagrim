@@ -30,7 +30,7 @@
           <li>Password <input type="password" name="password"></li>
         </ul>
         <br/>
-        <input type="submit" value="Regidter"> 
+        <input type="submit" value="Register"> 
       </form>
 
     </main>
