@@ -19,8 +19,8 @@
       <h3>Login</h3>
       <form method="POST"  action="Login">
         <ul>
-          <li>User Name <input type="text" name="username"></li>
-          <li>Password <input type="password" name="password"></li>
+          <li>User Name <input type="text" name="username" required></li>
+          <li>Password <input type="password" name="password" required></li>
         </ul>
         <br/>
         <input type="submit" value="Login"> 
