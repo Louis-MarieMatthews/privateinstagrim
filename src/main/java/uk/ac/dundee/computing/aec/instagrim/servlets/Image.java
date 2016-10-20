@@ -245,7 +245,7 @@ public class Image extends HttpServlet
         try {
           tm.insertPic(b, type, filename, username);
           request.setAttribute( "message", "Your image has been uploaded sucessfully." );
-        } catch (NoDatabaseConnectionException e) {
+        } catch (Exception e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         }
         is.close();
