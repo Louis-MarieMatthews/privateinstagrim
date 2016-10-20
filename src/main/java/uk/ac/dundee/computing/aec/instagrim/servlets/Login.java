@@ -47,6 +47,16 @@ public class Login extends HttpServlet
   
   
   
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+  {
+        RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+        rd.forward(request, response);
+  }
+  
+  
+  
   /**
    * Handles the HTTP <code>POST</code> method.
    *
@@ -76,7 +86,7 @@ public class Login extends HttpServlet
 
       }
       else { // if the entered details are not correct
-        response.sendRedirect("/Instagrim/login.jsp");
+        response.sendRedirect("login.jsp");
       }
     } catch (NoDatabaseConnectionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
