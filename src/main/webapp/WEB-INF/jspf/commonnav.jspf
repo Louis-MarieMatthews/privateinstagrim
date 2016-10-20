@@ -8,6 +8,7 @@
         <li><a href="/Instagrim/upload.jsp">Upload</a></li>
           <% if (LoggedIn.isLoggedIn(request) ) { %>
             <li><a href="/Instagrim/Images/<%=LoggedIn.getUsername(request)%>">Your Images</a></li>
+            <li><a href="/Instagrim/log-out.jsp">Log Out</a></li>
           <% } else { %>
             <li><a href="Register">Register</a></li>
             <li><a href="Login">Login</a></li>

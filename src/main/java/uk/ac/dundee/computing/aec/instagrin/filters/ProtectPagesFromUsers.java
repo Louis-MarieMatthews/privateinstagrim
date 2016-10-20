@@ -40,7 +40,8 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
   urlPatterns = {
     "/register.jsp",
     "/Login",
-    "/Login/*"
+    "/Login/*",
+    "/log-out/"
   },
   dispatcherTypes = {
     DispatcherType.REQUEST,
