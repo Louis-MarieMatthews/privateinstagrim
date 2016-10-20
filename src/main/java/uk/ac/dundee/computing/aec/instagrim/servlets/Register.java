@@ -13,8 +13,6 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 
 /**
@@ -73,6 +72,11 @@ public class Register extends HttpServlet
     } catch (UsernameNotAsciiException e) {
       RequestDispatcher rd = request.getRequestDispatcher("/register.jsp");
       request.setAttribute("details_error", "The username must be an ASCII-US string.");
+      rd.forward(request, response);
+      return;
+    } catch (UsernameTakenException e) {
+      RequestDispatcher rd = request.getRequestDispatcher("/register.jsp");
+      request.setAttribute("details_error", "The username already exists.");
       rd.forward(request, response);
       return;
     }

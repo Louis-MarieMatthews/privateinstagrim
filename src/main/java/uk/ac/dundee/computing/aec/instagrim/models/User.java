@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 
@@ -38,10 +39,13 @@ public class User
   
   
   public static boolean registerUser(String username, String password)
-    throws NoDatabaseConnectionException, UsernameNotAsciiException
+    throws NoDatabaseConnectionException, UsernameNotAsciiException,
+           UsernameTakenException
   {
     if ( ! Charset.forName("US-ASCII").newEncoder().canEncode(username)) {
       throw new UsernameNotAsciiException();
+    } else if ( userExists(username) ) {
+      throw new UsernameTakenException();
     }
     String encodedPassword = null;
     try {
@@ -95,5 +99,22 @@ public class User
       }
     }
     return false;
+  }
+  
+  
+  
+  public static boolean userExists(String username)
+    throws NoDatabaseConnectionException
+  {
+    Session session = CassandraHosts.getCluster().connect("instagrim");
+    PreparedStatement ps = session.prepare("select login from userprofiles where login = ?");
+    ResultSet rs = null;
+    BoundStatement boundStatement = new BoundStatement(ps);
+    rs = session.execute(boundStatement.bind(username));
+    if ( rs.isExhausted() ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
