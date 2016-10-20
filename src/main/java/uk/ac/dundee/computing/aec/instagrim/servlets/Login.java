@@ -87,7 +87,10 @@ public class Login extends HttpServlet
 
       }
       else { // if the entered details are not correct
-        response.sendRedirect("login.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
+        request.setAttribute("details_error", "The entered details are incorrect.");
+        rd.forward(request, response);
+        return;
       }
     } catch (NoDatabaseConnectionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );

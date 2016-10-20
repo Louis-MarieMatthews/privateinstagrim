@@ -17,6 +17,13 @@
 
     <main>
       <h3>Login</h3>
+        <%
+          if ( request.getAttribute("details_error") != null ) {
+            %>
+            <p><%=request.getAttribute("details_error") %></p>
+            <%
+          }  
+        %>
       <form method="POST"  action="Login">
         <ul>
           <li>User Name <input type="text" name="username" required></li>
