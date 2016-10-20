@@ -17,12 +17,21 @@
     <header>
       <h1>InstaGrim ! </h1>
       <h2>Your world in Black and White</h2>
+      <%
+          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+          if (lg != null) {
+            String username = lg.getUsername();
+            if (lg.isLoggedIn())
+      %>
+      <p>Hello, <%= lg.getUsername() %>.</p>
+      <%
+          }
+      %>
     </header>
     <nav>
       <ul>
         <li><a href="upload.jsp">Upload</a></li>
           <%
-            LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
             if (lg != null) {
               String username = lg.getUsername();
               if (lg.isLoggedIn()) {

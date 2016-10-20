@@ -4,6 +4,7 @@
     Author     : Louis-Marie Matthews
 --%>
 
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +13,18 @@
     <title>The image has not been found</title>
   </head>
   <body>
-    <h1>The requested image has not been found</h1>
+    <nav>
+      <h1>The requested image has not been found</h1>
+      <%
+          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+          if (lg != null) {
+            String username = lg.getUsername();
+            if (lg.isLoggedIn())
+      %>
+      <p>Hello, <%= lg.getUsername() %>.</p>
+      <%
+          }
+      %>
+    </nav>
   </body>
 </html>

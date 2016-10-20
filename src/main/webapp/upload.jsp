@@ -4,6 +4,7 @@
   Author   : Andy Cobley
 --%>
 
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,16 @@
   <body>
     <h1>InstaGrim ! </h1>
     <h2>Your world in Black and White</h2>
+      <%
+          LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
+          if (lg != null) {
+            String username = lg.getUsername();
+            if (lg.isLoggedIn())
+      %>
+      <p>Hello, <%= lg.getUsername() %>.</p>
+      <%
+          }
+      %>
     <nav>
       <ul>
         <li class="nav"><a href="upload.jsp">Upload</a></li>
