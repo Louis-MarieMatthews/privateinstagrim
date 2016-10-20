@@ -1,8 +1,14 @@
 <%-- any content can be specified here e.g.: --%>
+<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
 <%@ page pageEncoding="UTF-8" %>
 
 <footer>
   <ul>
-    <li class="footer"><a href="/Instagrim">Home</a></li>
+    <li class="footer">
+      <a href="/Instagrim">Home</a>
+      <% if ( LoggedIn.isLoggedIn(request) ) { %>
+      <a href="/Instagrim/delete-account.jsp">Account deletion</a>
+      <% } %>
+    </li>
   </ul>
 </footer>

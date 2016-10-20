@@ -32,7 +32,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @version 1.0
  */
 @WebFilter(
-  filterName = "Log Out",
+  filterName = "LogOut",
   urlPatterns = {
     "/log-out.jsp"
   },

@@ -16,7 +16,8 @@
     <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     <main>
-      
+      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
+      <h1>Home</h1>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

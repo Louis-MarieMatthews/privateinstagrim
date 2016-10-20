@@ -20,11 +20,15 @@ import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
+import uk.ac.dundee.computing.aec.instagrim.exception.WrongLoginDetailsException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
 /**
  * A model class to acess database-stored users.
@@ -115,6 +119,37 @@ public class User
       return false;
     } else {
       return true;
+    }
+  }
+  
+  
+  
+  public static void delete(String username, String password)
+    throws NoDatabaseConnectionException, WrongLoginDetailsException
+  {
+    System.out.println("User.delete(…): called. username = " + username );
+    if ( isValidUser( username, password ) ) {
+      Session session = CassandraHosts.getCluster().connect("instagrim");
+      PreparedStatement ps1 = session.prepare("DELETE FROM userpiclist WHERE user = ?");
+      PreparedStatement ps2 = session.prepare("DELETE FROM userprofiles WHERE login = ?");
+      BoundStatement bs1 = new BoundStatement(ps1);
+      session.execute(bs1.bind(username));
+      BoundStatement bs2 = new BoundStatement(ps2);
+      session.execute(bs2.bind(username));
+      LinkedList<Pic> list = PicModel.getPicsForUser(username);
+      try {
+        int n = list.size();
+          for ( int i = 0; i < n; i++ ) {
+            PreparedStatement ps = session.prepare("DELETE FROM Pics WHERE picid = ?");
+            BoundStatement bs = new BoundStatement(ps);
+            session.execute(bs.bind(list.get(i).getStringUUID()));
+            System.out.println( "User.delete(…): Tried to delete " + list.get(i).getStringUUID() );
+          }
+      } catch ( NullPointerException e ) {
+        System.out.println( "User.delete(…): No pics found for " + username + ".");
+      }
+    } else {
+      throw new WrongLoginDetailsException();
     }
   }
 }

@@ -1,0 +1,9 @@
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+
+<% if ( request.getAttribute("confirmation_message") != null ) { %>
+  <p><%=request.getAttribute("confirmation_message") %></p>
+<% }
+   if ( request.getAttribute("error_message") != null ) { %>
+   <p><%=request.getAttribute("error_message") %></p>
+   <% } %>

@@ -83,9 +83,7 @@ public class LoggedIn
     LoggedIn lg = (LoggedIn) ((HttpServletRequest)request).getSession()
       .getAttribute("LoggedIn");
     if ( lg != null ) {
-      if ( lg.isLoggedIn() ) {
-        return true;
-      }
+      return lg.isLoggedIn();
     }
     return false;
   }
@@ -96,9 +94,7 @@ public class LoggedIn
     LoggedIn lg = (LoggedIn) ((HttpServletRequest)request).getSession()
       .getAttribute("LoggedIn");
     if ( lg != null ) {
-      if ( lg.isLoggedIn() ) {
-        lg.logOut();
-      }
+      lg.logOut();
     }
   }
 }
