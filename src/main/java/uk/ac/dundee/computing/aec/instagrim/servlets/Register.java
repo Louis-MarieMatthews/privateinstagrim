@@ -83,18 +83,4 @@ public class Register extends HttpServlet
 
     response.sendRedirect("/Instagrim");
   }
-  
-  
-  
-  /**
-   * Returns a short description of the servlet.
-   * Looks useless. May be remove it?
-   *
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo()
-  {
-    return "Short description";
-  }// </editor-fold>
 }
