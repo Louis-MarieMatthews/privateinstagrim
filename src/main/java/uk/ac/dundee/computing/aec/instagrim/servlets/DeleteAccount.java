@@ -13,20 +13,13 @@
 package uk.ac.dundee.computing.aec.instagrim.servlets;
 
 import java.io.IOException;
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.WrongLoginDetailsException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
@@ -71,7 +64,7 @@ public class DeleteAccount extends HttpServlet
         + "deleted.");
       System.out.println( "DeleteAccount.doPost(…): try block completely done." );
     }
-    catch ( NoDatabaseConnectionException e ) {
+    catch ( NoUseableSessionException e ) {
       request.setAttribute("error_message", "Sorry, for technical reasons, we"
         + " were not able to delete your account. ");
     }

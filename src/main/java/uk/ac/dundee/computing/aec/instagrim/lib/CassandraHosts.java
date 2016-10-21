@@ -12,49 +12,92 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.lib;
 
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Session;
+import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 
 /**
- * Singleton class allowing other classes to acess a cassandra cluster.
+ * Singleton class allowing other classes to acess a the Cassandra session for
+ * Instagrim. The initialisation and closure of the cluster should be 
+ * respectively done during the deployment of the context and before its 
+ * undeployment.
+ * It is OK to have one static variable representing the cluster and the session
+ * because those objects are thread-safe.
+ * 
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
 public final class CassandraHosts
 {
   private static Cluster cluster;
+  private static Session session;
   private final static String HOST = "127.0.0.1";  //at least one starting point to talk to
   
   
-  
-  public static Cluster getCluster()
-    throws NoDatabaseConnectionException
+  /**
+   * Initialise the cluster, connect it to a node, sets up the keyspace 
+   * instagrim if it doesn't exist yet, and create and save a session using this
+   * keyspace.
+   */
+  public static void init()
   {
-    if (cluster == null) {
-      System.out.println("getCluster");
-      cluster = Cluster.builder().addContactPoint(HOST).build();
-      Keyspaces.setUpKeyspaces(cluster);
-    }
-    if ( isClusterWorking() ) {
-      return cluster;
-    } else {
-      throw new NoDatabaseConnectionException();
-    }
+    cluster = Cluster.builder().addContactPoint(HOST).build();
+    Keyspaces.setUpKeyspaces(cluster);
+    session = cluster.connect("instagrim");
   }
   
   
-  
-  private static boolean isClusterWorking() {
-    if ( cluster != null & ! cluster.isClosed() ) {
-      return true;
+  /**
+   * Returns a session of the cluster using the instagrim keyspace. This 
+   * session should not be closed, as it is shared by all the threads. Instead,
+   * this task should be delegated to a servlet event listener called before 
+   * the undeployment of the context.
+   * Closing it in a different way may cause UnavailableSessionException.
+   * In such an event, it is still possible to reopen the session simply by 
+   * calling the init() method again.
+   * 
+   * @return the session of the Cassandra cluster using the instagrim keyspace
+   * @throws NullSessionException if the cluster is null
+   * @throws UnavailableSessionException if the cluster is closed / closing
+   */
+  public static Session getSession()
+    throws NullSessionException, UnavailableSessionException
+  {
+    if ( session == null) {
+      throw new NullSessionException();
+    } else if ( session.isClosed() ) {
+      throw new UnavailableSessionException();
     } else {
-      return false;
+      return session;
     }
   }
   
+  /**
+   * Useful when a prepared statement is only used once. Otherwise, it might be 
+   * better to reuse it. Since prepared statements in the context will 
+   * necessarily be used multiple times, it might be worth it saving them in 
+   * some variables. To confirm though.
+   * 
+   * @param query the prepared query as a string
+   * @param bound what to bind the prepared statement with
+   * @return result set from the query
+   */
+  public static ResultSet query(String query, Object... bound)
+    throws NullSessionException, UnavailableSessionException
+  {
+    PreparedStatement ps = getSession().prepare( query );
+    BoundStatement boundStatement = new BoundStatement(ps);
+    return getSession().execute(boundStatement.bind( bound ));
+  }
   
   
+  /**
+   * Close the cluster (and the session in the process).
+   */
   public static void close()
   {
     cluster.close();

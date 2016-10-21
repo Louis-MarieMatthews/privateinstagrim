@@ -20,7 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
@@ -66,7 +66,7 @@ public class Register extends HttpServlet
     
     try {
       User.registerUser(username, password);
-    } catch (NoDatabaseConnectionException e) {
+    } catch (NoUseableSessionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
       return;
     } catch (UsernameNotAsciiException e) {

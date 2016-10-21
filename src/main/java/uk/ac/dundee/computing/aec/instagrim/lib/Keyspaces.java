@@ -27,6 +27,13 @@ import com.datastax.driver.core.SimpleStatement;
  */
 public final class Keyspaces
 {
+  /**
+   * Sets up the Cassandra schema needed by the context. This method can not
+   * use the getSession() of CassandraHosts directly because it can be called 
+   * while the keyspace instagrim does not exist yet.
+   * 
+   * @param c the cluster on which to define the schema
+   */
   public static void setUpKeyspaces(Cluster c)
   {
     try {

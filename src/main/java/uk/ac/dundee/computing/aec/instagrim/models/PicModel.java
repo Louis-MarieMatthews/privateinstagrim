@@ -24,8 +24,6 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  * To manually generate a UUID use:
  * http://www.famkruithof.net/uuid/uuidgen
  */
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
@@ -40,7 +38,8 @@ import java.util.Date;
 import javax.imageio.ImageIO;
 import org.imgscalr.Scalr;
 import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
@@ -56,7 +55,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 public class PicModel
 {
   public static void insertPic(byte[] b, String type, String name, String user)
-    throws NoDatabaseConnectionException
+    throws NullSessionException, UnavailableSessionException
   {
     try {
       String types[] = Convertors.splitPath(type);
@@ -75,18 +74,16 @@ public class PicModel
       byte[] processedb = picDecolour(picid.toString(), types[1]);
       ByteBuffer processedbuf = ByteBuffer.wrap(processedb);
       int processedlength = processedb.length;
-      Session session = CassandraHosts.getCluster().connect("instagrim");
-
-      PreparedStatement psInsertPic = session.prepare("insert into pics ( picid, image,thumb,processed, user, interaction_time,imagelength,thumblength,processedlength,type,name) values(?,?,?,?,?,?,?,?,?,?,?)");
-      PreparedStatement psInsertPicToUser = session.prepare("insert into userpiclist ( picid, user, pic_added) values(?,?,?)");
-      BoundStatement bsInsertPic = new BoundStatement(psInsertPic);
-      BoundStatement bsInsertPicToUser = new BoundStatement(psInsertPicToUser);
 
       Date DateAdded = new Date();
-      session.execute(bsInsertPic.bind(picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name));
-      session.execute(bsInsertPicToUser.bind(picid, user, DateAdded));
-      session.close();
-
+      
+      CassandraHosts.query( "INSERT INTO pics ("
+        + "picid, image, thumb, processed, user, interaction_time, imagelength,"
+        + "thumblength, procesedlength, type, name )"
+        + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name );
+      CassandraHosts.query( "INSERT INTO userpiclist ( picid, user, pic_added ) values ( ?, ?, ? )", picid, user, DateAdded );
+      
     } catch (IOException ex) {
       System.out.println("Error --> " + ex);
     }
@@ -152,16 +149,10 @@ public class PicModel
   
   
   public static java.util.LinkedList<Pic> getPicsForUser(String user)
-    throws NoDatabaseConnectionException
+    throws NullSessionException, UnavailableSessionException
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
-    Session session = CassandraHosts.getCluster().connect("instagrim");
-    PreparedStatement ps = session.prepare("select picid from userpiclist where user = ?");
-    ResultSet rs = null;
-    BoundStatement boundStatement = new BoundStatement(ps);
-    rs = session.execute( // this is where the query is executed
-      boundStatement.bind( // here you are binding the 'boundStatement'
-        user));
+    ResultSet rs = CassandraHosts.query( "select picid from userpiclist where user = ?", user);
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return null;
@@ -186,39 +177,35 @@ public class PicModel
    * @param imageType
    * @param picId
    * @return 
+   * @throws uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException 
    */
   public static Pic getPic(int imageType, java.util.UUID picId)
-    throws InvalidImageTypeException, NoDatabaseConnectionException
+    throws InvalidImageTypeException, NullSessionException, UnavailableSessionException
   {
-    Session session = CassandraHosts.getCluster().connect("instagrim");
+    Session session = CassandraHosts.getSession();
     ByteBuffer bImage = null;
     String type = null;
     int length = 0;
     try {
       Convertors convertor = new Convertors();
-      ResultSet rs = null;
-      PreparedStatement ps = null;
+      ResultSet rs;
       
       
       /**
        * TODO: What if the given type isn't correct?
        */
       if (imageType == Convertors.DISPLAY_IMAGE) {
-        ps = session.prepare("select image,imagelength,type from pics where picid = ?");
+        rs = CassandraHosts.query("SELECT image, imagelength, type FROM pics WHERE picid = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_THUMB) {
-        ps = session.prepare("select thumb,imagelength,thumblength,type from pics where picid = ?");
+        rs = CassandraHosts.query("SELECT thumb, imagelength, thumblength, type FROM pics WHERE picid = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_PROCESSED) {
-        ps = session.prepare("select processed,processedlength,type from pics where picid = ?");
+        rs = CassandraHosts.query("SELECT processed, processedlength, type FROM pics WHERE picid = ?", picId );
       } else {
         throw new InvalidImageTypeException();
       }
-      BoundStatement boundStatement = new BoundStatement(ps);
-      rs = session.execute( // this is where the query is executed
-      boundStatement.bind( // here you are binding the 'boundStatement'
-          picId));
-
+      
       if (rs.isExhausted()) {
         System.out.println("No Images returned");
         return null;
@@ -244,7 +231,6 @@ public class PicModel
       System.out.println("Can't get Pic" + et);
       return null;
     }
-    session.close();
     Pic p = new Pic();
     p.setPic(bImage, length, type);
 

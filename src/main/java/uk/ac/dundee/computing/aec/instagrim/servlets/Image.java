@@ -30,7 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
@@ -72,7 +74,6 @@ public class Image extends HttpServlet
     commandsMap.put("Image", 1);
     commandsMap.put("Images", 2);
     commandsMap.put("Thumb", 3);
-
   }
   
   
@@ -110,7 +111,7 @@ public class Image extends HttpServlet
         case 1:
           try {
             displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
-          } catch (NoDatabaseConnectionException e) {
+          } catch (NoUseableSessionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
           }
@@ -118,14 +119,14 @@ public class Image extends HttpServlet
         case 2:
           try {
             displayImageList(args[2], request, response);
-          } catch (NoDatabaseConnectionException e) {
+          } catch (NoUseableSessionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
           }
           break;
         case 3:
           try {
           displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
-          } catch (NoDatabaseConnectionException e) {
+          } catch (NoUseableSessionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
           }
@@ -136,7 +137,7 @@ public class Image extends HttpServlet
     } else {
       try {
         displayImageList(User.DEFAULT_USERNAME, request, response);
-      } catch (NoDatabaseConnectionException e) {
+      } catch (NoUseableSessionException e) {
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         return;
       }
@@ -155,7 +156,7 @@ public class Image extends HttpServlet
    * @throws IOException 
    */
   private void displayImageList(String user, HttpServletRequest request, HttpServletResponse response)
-    throws NoDatabaseConnectionException, ServletException, IOException
+    throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
     java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersPics.jsp");
@@ -176,7 +177,7 @@ public class Image extends HttpServlet
    */
   private void displayImage(int type, String image, HttpServletRequest request,
                             HttpServletResponse response)
-    throws NoDatabaseConnectionException, ServletException, IOException
+    throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
     try {
       Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
@@ -245,7 +246,7 @@ public class Image extends HttpServlet
         try {
           tm.insertPic(b, type, filename, username);
           request.setAttribute( "message", "Your image has been uploaded sucessfully." );
-        } catch (NoDatabaseConnectionException e) {
+        } catch ( NoUseableSessionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         } catch ( IllegalArgumentException e ) {
           request.setAttribute( "message", "The file you uploaded is not one "

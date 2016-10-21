@@ -13,11 +13,12 @@
 package uk.ac.dundee.computing.aec.instagrim.exception;
 
 /**
- *
+ * Thrown when the requested session can not be used, whatever the reason.
+ * 
  * @author Louis-Marie Matthews
  * @version 1.0
  */
-public class UsernameNotAsciiException  extends Exception
+public class NoUseableSessionException extends Exception
 {
   
 }

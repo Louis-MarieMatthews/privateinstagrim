@@ -13,11 +13,12 @@
 package uk.ac.dundee.computing.aec.instagrim.exception;
 
 /**
- *
+ * Thrown when the requested session is null.
+ * 
  * @author Louis-Marie Matthews
  * @version 1.0
  */
-public class UsernameNotAsciiException  extends Exception
+public class NullSessionException extends NoUseableSessionException
 {
   
 }

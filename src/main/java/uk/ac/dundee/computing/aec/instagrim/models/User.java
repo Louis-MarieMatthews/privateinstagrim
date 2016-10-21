@@ -12,17 +12,14 @@
  */
 package uk.ac.dundee.computing.aec.instagrim.models;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.exception.WrongLoginDetailsException;
@@ -43,8 +40,8 @@ public class User
   
   
   public static boolean registerUser(String username, String password)
-    throws NoDatabaseConnectionException, UsernameNotAsciiException,
-           UsernameTakenException
+    throws UsernameNotAsciiException, UsernameTakenException, NullSessionException,
+           UnavailableSessionException
   {
     if ( ! Charset.forName("US-ASCII").newEncoder().canEncode(username)) {
       throw new UsernameNotAsciiException();
@@ -58,13 +55,8 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-      Session session = CassandraHosts.getCluster().connect("instagrim");
-    PreparedStatement ps = session.prepare("insert into userprofiles (login,password) Values(?,?)");
-
-    BoundStatement boundStatement = new BoundStatement(ps);
-    session.execute( // this is where the query is executed
-        boundStatement.bind( // here you are binding the 'boundStatement'
-            username, encodedPassword));
+    CassandraHosts.query("INSERT INTO userprofiles (login, password) VALUES ( ?, ? )",
+                         username, encodedPassword);
     //We are assuming this always works.  Also a transaction would be good here !
 
     return true;
@@ -73,7 +65,7 @@ public class User
   
   
   public static boolean isValidUser(String username, String password)
-    throws NoDatabaseConnectionException
+    throws NullSessionException, UnavailableSessionException
   {
     String encodedPassword = null;
     try {
@@ -82,13 +74,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    Session session = CassandraHosts.getCluster().connect("instagrim");
-    PreparedStatement ps = session.prepare("select password from userprofiles where login = ?");
-    ResultSet rs = null;
-    BoundStatement boundStatement = new BoundStatement(ps);
-    rs = session.execute( // this is where the query is executed
-        boundStatement.bind( // here you are binding the 'boundStatement'
-            username));
+    ResultSet rs = CassandraHosts.query( "SELECT password FROM userprofiles WHERE login = ?", username );
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return false;
@@ -108,13 +94,9 @@ public class User
   
   
   public static boolean userExists(String username)
-    throws NoDatabaseConnectionException
+    throws NullSessionException, UnavailableSessionException
   {
-    Session session = CassandraHosts.getCluster().connect("instagrim");
-    PreparedStatement ps = session.prepare("select login from userprofiles where login = ?");
-    ResultSet rs = null;
-    BoundStatement boundStatement = new BoundStatement(ps);
-    rs = session.execute(boundStatement.bind(username));
+    ResultSet rs = CassandraHosts.query("select login from userprofiles where login = ?", username);
     if ( rs.isExhausted() ) {
       return false;
     } else {
@@ -125,25 +107,21 @@ public class User
   
   
   public static void delete(String username, String password)
-    throws NoDatabaseConnectionException, WrongLoginDetailsException
+    throws WrongLoginDetailsException, NullSessionException, UnavailableSessionException
   {
     System.out.println("User.delete(…): called. username = " + username );
     if ( isValidUser( username, password ) ) {
-      Session session = CassandraHosts.getCluster().connect("instagrim");
-      PreparedStatement ps1 = session.prepare("DELETE FROM userpiclist WHERE user = ?");
-      PreparedStatement ps2 = session.prepare("DELETE FROM userprofiles WHERE login = ?");
-      BoundStatement bs1 = new BoundStatement(ps1);
-      session.execute(bs1.bind(username));
-      BoundStatement bs2 = new BoundStatement(ps2);
-      session.execute(bs2.bind(username));
+      CassandraHosts.query("DELETE FROM userpiclist WHERE user = ?", username);
+      CassandraHosts.query("DELETE FROM userprofiles WHERE login = ?", username);
+      
       LinkedList<Pic> list = PicModel.getPicsForUser(username);
       try {
         int n = list.size();
+        String picId;
           for ( int i = 0; i < n; i++ ) {
-            PreparedStatement ps = session.prepare("DELETE FROM Pics WHERE picid = ?");
-            BoundStatement bs = new BoundStatement(ps);
-            session.execute(bs.bind(list.get(i).getStringUUID()));
-            System.out.println( "User.delete(…): Tried to delete " + list.get(i).getStringUUID() );
+            picId = list.get(i).getStringUUID();
+            CassandraHosts.query( "DELETE FROM Pics WHERE picid = ?", picId );
+            System.out.println( "User.delete(…): Tried to delete " + picId );
           }
       } catch ( NullPointerException e ) {
         System.out.println( "User.delete(…): No pics found for " + username + ".");

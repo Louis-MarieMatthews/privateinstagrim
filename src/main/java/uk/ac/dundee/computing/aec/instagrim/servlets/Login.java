@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import uk.ac.dundee.computing.aec.instagrim.exception.NoDatabaseConnectionException;
+import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 
@@ -91,7 +91,7 @@ public class Login extends HttpServlet
         request.setAttribute("details_error", "The entered details are incorrect.");
         rd.forward(request, response);
       }
-    } catch (NoDatabaseConnectionException e) {
+    } catch (NoUseableSessionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
       return;
     }
