@@ -22,7 +22,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionExceptio
 
 /**
  * Singleton class allowing other classes to acess a the Cassandra session for
- * Instagrim. The initialisation and closure of the cluster should be 
+ * Instagrim. The initialisation and closure of the cluster should be 
  * respectively done during the deployment of the context and before its 
  * undeployment.
  * It is OK to have one static variable representing the cluster and the session

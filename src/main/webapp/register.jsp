@@ -1,7 +1,7 @@
 <%-- 
   Document   : register.jsp
   Created on : Sep 28, 2014, 6:29:51 PM
-  Author   : Andy Cobley, Louis-Marie Matthews
+  Author   : Andy Cobley, Louis-Marie Matthews
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
