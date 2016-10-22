@@ -41,7 +41,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.lib.Cassandra;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -78,12 +78,12 @@ public class PicModel
 
       Date DateAdded = new Date();
       
-      CassandraHosts.query( "INSERT INTO pictures ("
+      Cassandra.query( "INSERT INTO pictures ("
         + "id, image, thumbnail, processed, user, interaction_time, image_length,"
         + "thumbnail_length, processed_length, type, name )"
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name );
-      CassandraHosts.query( "INSERT INTO user_pictures ( picture_id, user, picture_added ) VALUES ( ?, ?, ? )", picid, user, DateAdded );
+      Cassandra.query( "INSERT INTO user_pictures ( picture_id, user, picture_added ) VALUES ( ?, ?, ? )", picid, user, DateAdded );
       
     } catch (IOException ex) {
       System.out.println("Error --> " + ex);
@@ -153,7 +153,7 @@ public class PicModel
     throws NullSessionException, UnavailableSessionException
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
-    ResultSet rs = CassandraHosts.query( "SELECT picture_id FROM user_pictures WHERE user = ?", user);
+    ResultSet rs = Cassandra.query( "SELECT picture_id FROM user_pictures WHERE user = ?", user);
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return null;
@@ -183,7 +183,7 @@ public class PicModel
   public static Pic getPic(int imageType, java.util.UUID picId)
     throws InvalidImageTypeException, NullSessionException, UnavailableSessionException
   {
-    Session session = CassandraHosts.getSession();
+    Session session = Cassandra.getSession();
     ByteBuffer bImage = null;
     String type = null;
     int length = 0;
@@ -196,13 +196,13 @@ public class PicModel
        * TODO: What if the given type isn't correct?
        */
       if (imageType == Convertors.DISPLAY_IMAGE) {
-        rs = CassandraHosts.query("SELECT image, image_length, type FROM pictures WHERE id = ?", picId );
+        rs = Cassandra.query("SELECT image, image_length, type FROM pictures WHERE id = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_THUMB) {
-        rs = CassandraHosts.query("SELECT thumbnail, image_length, thumbnail_length, type FROM pictures WHERE id = ?", picId );
+        rs = Cassandra.query("SELECT thumbnail, image_length, thumbnail_length, type FROM pictures WHERE id = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_PROCESSED) {
-        rs = CassandraHosts.query("SELECT processed, processed_length, type FROM pictures WHERE id = ?", picId );
+        rs = Cassandra.query("SELECT processed, processed_length, type FROM pictures WHERE id = ?", picId );
       } else {
         throw new InvalidImageTypeException();
       }

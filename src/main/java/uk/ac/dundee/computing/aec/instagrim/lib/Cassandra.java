@@ -31,7 +31,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionExceptio
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-public final class CassandraHosts
+public final class Cassandra
 {
   private static Cluster cluster;
   private static Session session;

@@ -15,7 +15,7 @@ package uk.ac.dundee.computing.aec.instagrim.listener;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import uk.ac.dundee.computing.aec.instagrim.lib.CassandraHosts;
+import uk.ac.dundee.computing.aec.instagrim.lib.Cassandra;
 
 /**
  * This class contains methods called during the deployment of the context and 
@@ -32,11 +32,11 @@ public class InstagrimContextListener
 
   @Override
   public void contextInitialized(ServletContextEvent sce) {
-    CassandraHosts.init();
+    Cassandra.init();
   }
 
   @Override
   public void contextDestroyed(ServletContextEvent sce) {
-    CassandraHosts.close();
+    Cassandra.close();
   }
 }
