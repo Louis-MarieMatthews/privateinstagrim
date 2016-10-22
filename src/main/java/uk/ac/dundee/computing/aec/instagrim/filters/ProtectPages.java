@@ -10,7 +10,7 @@
  * 4. Abbreviations and the use of init is okay (r17, r24)
  * 5. Statements and variable declarations don't need to be aligned (r77, r78)
  */
-package uk.ac.dundee.computing.aec.instagrin.filters;
+package uk.ac.dundee.computing.aec.instagrim.filters;
 
 import java.io.IOException;
 import java.io.PrintStream;

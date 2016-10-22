@@ -60,19 +60,19 @@
     
     <filter>
       <filter-name>logout</filter-name>
-      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.LogOut</filter-class>
+      <filter-class>uk.ac.dundee.computing.aec.instagrim.filters.LogOut</filter-class>
     </filter>
     
     
     <filter>
       <filter-name>protectpages</filter-name>
-      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.ProtectPages</filter-class>
+      <filter-class>uk.ac.dundee.computing.aec.instagrim.filters.ProtectPages</filter-class>
     </filter>
     
     
     <filter>
       <filter-name>protectpagesfromusers</filter-name>
-      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.ProtectPagesFromUsers</filter-class>
+      <filter-class>uk.ac.dundee.computing.aec.instagrim.filters.ProtectPagesFromUsers</filter-class>
     </filter>
     
     
