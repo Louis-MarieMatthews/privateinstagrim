@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+
+    <!-- General description of your web application -->
+
+    <display-name>Instagrim</display-name>
+    <description>
+      Share classy pictures.
+    </description>
+
+
+    <!-- Context initialization parameters that define shared
+         String constants used within your application, which
+         can be customized by the system administrator who is
+         installing your application.  The values actually
+         assigned to these parameters can be retrieved in a
+         servlet or JSP page by calling:
+
+             String value =
+               getServletContext().getInitParameter("name");
+
+         where "name" matches the <param-name> element of
+         one of these initialization parameters.
+
+         You can define any number of context initialization
+         parameters, including zero.
+    -->
+
+    <context-param>
+      <param-name>Louis-Marie Matthews</param-name>
+      <param-value>lgmatthews@dundee.ac.uk</param-value>
+      <description>
+        The EMAIL address of the administrator to whom questions
+        and comments about this application should be addressed.
+      </description>
+    </context-param>
+    
+    
+    <filter>
+      <filter-name>logout</filter-name>
+      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.LogOut</filter-class>
+    </filter>
+    
+    
+    <filter>
+      <filter-name>protectpages</filter-name>
+      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.ProtectPages</filter-class>
+    </filter>
+    
+    
+    <filter>
+      <filter-name>protectpagesfromusers</filter-name>
+      <filter-class>uk.ac.dundee.computing.aec.instagrin.filters.ProtectPagesFromUsers</filter-class>
+    </filter>
+    
+    
+    <filter-mapping>
+      <filter-name>logout</filter-name>
+      <url-pattern>/log-out.jsp</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpages</filter-name>
+      <url-pattern>/upload.jsp</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpagesfromusers</filter-name>
+      <url-pattern>/register.jsp</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpagesfromusers</filter-name>
+      <url-pattern>/Login</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpagesfromusers</filter-name>
+      <url-pattern>/Login/*</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpagesfromusers</filter-name>
+      <url-pattern>/log-out/</url-pattern>
+    </filter-mapping>
+    
+    
+    
+    
+    <!-- Servlet definitions for the servlets that make up
+         your web application, including initialization
+         parameters.  With Tomcat, you can also send requests
+         to servlets not listed here with a request like this:
+
+           http://localhost:8080/{context-path}/servlet/{classname}
+
+         but this usage is not guaranteed to be portable.  It also
+         makes relative references to images and other resources
+         required by your servlet more complicated, so defining
+         all of your servlets (and defining a mapping to them with
+         a servlet-mapping element) is recommended.
+
+         Servlet initialization parameters can be retrieved in a
+         servlet or JSP page by calling:
+
+             String value =
+               getServletConfig().getInitParameter("name");
+
+         where "name" matches the <param-name> element of
+         one of these initialization parameters.
+
+         You can define any number of servlets, including zero.
+    -->
+
+
+    <servlet>
+      <servlet-name>deleteaccount</servlet-name>
+      <description>
+      </description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.DeleteAccount</servlet-class>
+    </servlet>
+
+    <servlet>
+      <servlet-name>image</servlet-name>
+      <description>
+      </description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.Image</servlet-class>
+    </servlet>
+
+
+    <servlet>
+      <servlet-name>login</servlet-name>
+      <description></description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.Login</servlet-class>
+    </servlet>
+    
+
+    <servlet>
+      <servlet-name>register</servlet-name>
+      <description></description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.Register</servlet-class>
+    </servlet>
+    <!-- Define mappings that are used by the servlet container to
+         translate a particular request URI (context-relative) to a
+         particular servlet.  The examples below correspond to the
+         servlet descriptions above.  Thus, a request URI like:
+
+           http://localhost:8080/{contextpath}/graph
+
+         will be mapped to the "graph" servlet, while a request like:
+
+           http://localhost:8080/{contextpath}/saveCustomer.do
+
+         will be mapped to the "controller" servlet.
+
+         You may define any number of servlet mappings, including zero.
+         It is also legal to define more than one mapping for the same
+         servlet, if you wish to.
+    -->
+    
+    
+    <servlet-mapping>
+      <servlet-name>deleteaccount</servlet-name>
+      <url-pattern>/delete-account</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>image</servlet-name>
+      <url-pattern>/Image</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>image</servlet-name>
+      <url-pattern>/Image/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>image</servlet-name>
+      <url-pattern>/Thumb/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>image</servlet-name>
+      <url-pattern>/Images</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>image</servlet-name>
+      <url-pattern>/Images/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>login</servlet-name>
+      <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>login</servlet-name>
+      <url-pattern>/Login/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>register</servlet-name>
+      <url-pattern>/Register</url-pattern>
+    </servlet-mapping>
+    
+    
+    <!-- Define the default session timeout for your application,
+         in minutes.  From a servlet or JSP page, you can modify
+         the timeout for a particular session dynamically by using
+         HttpSession.getMaxInactiveInterval(). -->
+
+    <session-config>
+      <session-timeout>30</session-timeout>    <!-- 30 minutes -->
+    </session-config>
+
+
+</web-app>

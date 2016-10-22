@@ -44,15 +44,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-@WebServlet(
-  urlPatterns = {
-    "/Image",
-    "/Image/*",
-    "/Thumb/*",
-    "/Images",
-    "/Images/*"
-  }
-)
 @MultipartConfig
 public class Image extends HttpServlet
 {

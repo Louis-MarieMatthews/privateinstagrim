@@ -30,12 +30,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @author Louis-Marie Matthews
  * @version 1.0
  */
-@WebServlet(
-  name = "DeleteAccount",
-  urlPatterns = {
-    "/delete-account"
-  }
-)
 public class DeleteAccount extends HttpServlet
 {
   @Override

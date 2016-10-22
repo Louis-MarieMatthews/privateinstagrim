@@ -31,15 +31,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @author Louis-Marie Matthews
  * @version 1.0
  */
-@WebFilter(
-  filterName = "LogOut",
-  urlPatterns = {
-    "/log-out.jsp"
-  },
-  dispatcherTypes = {
-    DispatcherType.REQUEST
-  }
-)
 public class LogOut
   implements Filter
 {

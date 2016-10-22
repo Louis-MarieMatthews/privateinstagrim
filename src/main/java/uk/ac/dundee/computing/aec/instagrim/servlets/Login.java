@@ -30,13 +30,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-@WebServlet(
-  name = "Login",
-  urlPatterns = {
-    "/Login",
-    "/Login/*"
-  }
-)
 public class Login extends HttpServlet
 {
   public void init(ServletConfig config)

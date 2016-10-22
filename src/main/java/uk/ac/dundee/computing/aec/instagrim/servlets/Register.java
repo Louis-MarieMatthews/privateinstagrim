@@ -30,10 +30,6 @@ import uk.ac.dundee.computing.aec.instagrim.models.User;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-@WebServlet(
-  name = "Register",
-  urlPatterns = {"/Register"}
-)
 public class Register extends HttpServlet
 {
   public void init(ServletConfig config)

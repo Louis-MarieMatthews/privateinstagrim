@@ -35,15 +35,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-@WebFilter(
-  filterName = "ProtectPages",
-  urlPatterns = {"/upload.jsp"},
-  dispatcherTypes = {
-    DispatcherType.REQUEST,
-    DispatcherType.FORWARD,
-    DispatcherType.INCLUDE
-  }
-)
 public class ProtectPages
   implements Filter
 {

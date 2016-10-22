@@ -35,20 +35,6 @@ import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-@WebFilter(
-  filterName = "ProtectPagesFromUsers",
-  urlPatterns = {
-    "/register.jsp",
-    "/Login",
-    "/Login/*",
-    "/log-out/"
-  },
-  dispatcherTypes = {
-    DispatcherType.REQUEST,
-    DispatcherType.FORWARD,
-    DispatcherType.INCLUDE
-  }
-)
 public class ProtectPagesFromUsers
   implements Filter
 {
