@@ -79,7 +79,7 @@ public class PicModel
       
       CassandraHosts.query( "INSERT INTO pics ("
         + "picid, image, thumb, processed, user, interaction_time, imagelength,"
-        + "thumblength, procesedlength, type, name )"
+        + "thumblength, processedlength, type, name )"
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name );
       CassandraHosts.query( "INSERT INTO userpiclist ( picid, user, pic_added ) values ( ?, ?, ? )", picid, user, DateAdded );
