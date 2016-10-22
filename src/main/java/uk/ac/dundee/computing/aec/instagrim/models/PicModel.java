@@ -61,6 +61,7 @@ public class PicModel
       String types[] = Convertors.splitPath(type);
       ByteBuffer buffer = ByteBuffer.wrap(b);
       int length = b.length;
+      // TODO: camelcase
       java.util.UUID picid = Convertors.getTimeUUID();
 
       //The following is a quick and dirty way of doing this, will fill the disk quickly !
@@ -77,12 +78,12 @@ public class PicModel
 
       Date DateAdded = new Date();
       
-      CassandraHosts.query( "INSERT INTO pics ("
-        + "picid, image, thumb, processed, user, interaction_time, imagelength,"
-        + "thumblength, processedlength, type, name )"
+      CassandraHosts.query( "INSERT INTO pictures ("
+        + "id, image, thumbnail, processed, user, interaction_time, image_length,"
+        + "thumbnail_length, processed_length, type, name )"
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name );
-      CassandraHosts.query( "INSERT INTO userpiclist ( picid, user, pic_added ) values ( ?, ?, ? )", picid, user, DateAdded );
+      CassandraHosts.query( "INSERT INTO user_pictures ( picture_id, user, picture_added ) values ( ?, ?, ? )", picid, user, DateAdded );
       
     } catch (IOException ex) {
       System.out.println("Error --> " + ex);
@@ -152,7 +153,7 @@ public class PicModel
     throws NullSessionException, UnavailableSessionException
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
-    ResultSet rs = CassandraHosts.query( "select picid from userpiclist where user = ?", user);
+    ResultSet rs = CassandraHosts.query( "select picture_id from user_pictures where user = ?", user);
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return null;
@@ -160,7 +161,7 @@ public class PicModel
     else {
       for (Row row : rs) {
       Pic pic = new Pic();
-      java.util.UUID uuid = row.getUUID("picid");
+      java.util.UUID uuid = row.getUUID("picture_id");
       System.out.println("UUID" + uuid.toString());
       pic.setUUID(uuid);
       pics.add(pic);
@@ -195,13 +196,13 @@ public class PicModel
        * TODO: What if the given type isn't correct?
        */
       if (imageType == Convertors.DISPLAY_IMAGE) {
-        rs = CassandraHosts.query("SELECT image, imagelength, type FROM pics WHERE picid = ?", picId );
+        rs = CassandraHosts.query("SELECT image, image_length, type FROM pictures WHERE id = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_THUMB) {
-        rs = CassandraHosts.query("SELECT thumb, imagelength, thumblength, type FROM pics WHERE picid = ?", picId );
+        rs = CassandraHosts.query("SELECT thumbnail, image_length, thumbnail_length, type FROM pictures WHERE id = ?", picId );
       }
       else if (imageType == Convertors.DISPLAY_PROCESSED) {
-        rs = CassandraHosts.query("SELECT processed, processedlength, type FROM pics WHERE picid = ?", picId );
+        rs = CassandraHosts.query("SELECT processed, processed_length, type FROM pictures WHERE id = ?", picId );
       } else {
         throw new InvalidImageTypeException();
       }
@@ -214,15 +215,15 @@ public class PicModel
         for (Row row : rs) {
           if (imageType == Convertors.DISPLAY_IMAGE) {
             bImage = row.getBytes("image");
-            length = row.getInt("imagelength");
+            length = row.getInt("image_length");
           }
           else if (imageType == Convertors.DISPLAY_THUMB) {
-            bImage = row.getBytes("thumb");
-            length = row.getInt("thumblength");
+            bImage = row.getBytes("thumbnail");
+            length = row.getInt("thumbnail_length");
           }
           else if (imageType == Convertors.DISPLAY_PROCESSED) {
             bImage = row.getBytes("processed");
-            length = row.getInt("processedlength");
+            length = row.getInt("processed_length");
           }
           type = row.getString("type");
         }

@@ -151,6 +151,7 @@ public class Image extends HttpServlet
   {
     java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersPics.jsp");
+    // TODO: camecalse
     request.setAttribute("Pics", lsPics);
     rd.forward(request, response);
   }

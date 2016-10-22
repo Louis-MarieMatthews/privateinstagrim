@@ -39,40 +39,40 @@ public final class Keyspaces
     try {
       //Add some keyspaces here
       String createKeyspace = "create keyspace if not exists instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
-      String createPicTable = "CREATE TABLE if not exists instagrim.Pics ("
+      String createPicTable = "CREATE TABLE if not exists instagrim.pictures ("
           + " user varchar,"
-          + " picid uuid, "
+          + " id uuid, "
           + " interaction_time timestamp,"
           + " title varchar,"
           + " image blob,"
-          + " thumb blob,"
+          + " thumbnail blob,"
           + " processed blob,"
-          + " imagelength int,"
-          + " thumblength int,"
-          + "  processedlength int,"
-          + " type  varchar,"
-          + " name  varchar,"
-          + " PRIMARY KEY (picid)"
+          + " image_length int,"
+          + " thumbnail_length int,"
+          + " processed_length int,"
+          + " type varchar,"
+          + " name varchar,"
+          + " PRIMARY KEY (id)"
           + ")";
-      String createUserPicList = "CREATE TABLE if not exists instagrim.userpiclist (\n"
-          + "picid uuid,\n"
+      String createUserPicList = "CREATE TABLE if not exists instagrim.user_pictures (\n"
+          + "picture_id uuid,\n"
           + "user varchar,\n"
-          + "pic_added timestamp,\n"
-          + "PRIMARY KEY (user,pic_added)\n"
-          + ") WITH CLUSTERING ORDER BY (pic_added desc);";
+          + "picture_added timestamp,\n"
+          + "PRIMARY KEY (user, picture_added)\n"
+          + ") WITH CLUSTERING ORDER BY (picture_added desc);";
       String createAddressType = "CREATE TYPE if not exists instagrim.address (\n"
-          + "    street text,\n"
-          + "    city text,\n"
-          + "    zip int\n"
-          + "  );";
-      String createUserProfile = "CREATE TABLE if not exists instagrim.userprofiles (\n"
-          + "    login text PRIMARY KEY,\n"
-          + "   password text,\n"
-          + "    first_name text,\n"
-          + "    last_name text,\n"
-          + "    email set<text>,\n"
-          + "    addresses  map<text, frozen <address>>\n"
-          + "  );";
+          + "street text,\n"
+          + "city text,\n"
+          + "zip int\n"
+          + ");";
+      String createUserProfile = "CREATE TABLE if not exists instagrim.user_profiles (\n"
+          + "login text PRIMARY KEY,\n"
+          + "password text,\n"
+          + "first_name text,\n"
+          + "last_name text,\n"
+          + "email set<text>,\n"
+          + "addresses  map<text, frozen <address>>\n"
+          + ");";
       Session session = c.connect();
       try {
         PreparedStatement statement = session

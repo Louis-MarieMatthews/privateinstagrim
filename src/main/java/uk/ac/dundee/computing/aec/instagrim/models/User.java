@@ -55,7 +55,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    CassandraHosts.query("INSERT INTO userprofiles (login, password) VALUES ( ?, ? )",
+    CassandraHosts.query("INSERT INTO user_profiles (login, password) VALUES ( ?, ? )",
                          username, encodedPassword);
     //We are assuming this always works.  Also a transaction would be good here !
 
@@ -74,7 +74,7 @@ public class User
       System.out.println("Can't check your password");
       return false;
     }
-    ResultSet rs = CassandraHosts.query( "SELECT password FROM userprofiles WHERE login = ?", username );
+    ResultSet rs = CassandraHosts.query( "SELECT password FROM user_profiles WHERE login = ?", username );
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return false;
@@ -96,7 +96,7 @@ public class User
   public static boolean userExists(String username)
     throws NullSessionException, UnavailableSessionException
   {
-    ResultSet rs = CassandraHosts.query("select login from userprofiles where login = ?", username);
+    ResultSet rs = CassandraHosts.query("select login from user_profiles where login = ?", username);
     if ( rs.isExhausted() ) {
       return false;
     } else {
@@ -111,8 +111,8 @@ public class User
   {
     System.out.println("User.delete(…): called. username = " + username );
     if ( isValidUser( username, password ) ) {
-      CassandraHosts.query("DELETE FROM userpiclist WHERE user = ?", username);
-      CassandraHosts.query("DELETE FROM userprofiles WHERE login = ?", username);
+      CassandraHosts.query("DELETE FROM user_pictures WHERE user = ?", username);
+      CassandraHosts.query("DELETE FROM user_profiles WHERE login = ?", username);
       
       LinkedList<Pic> list = PicModel.getPicsForUser(username);
       try {
@@ -120,7 +120,7 @@ public class User
         String picId;
           for ( int i = 0; i < n; i++ ) {
             picId = list.get(i).getStringUUID();
-            CassandraHosts.query( "DELETE FROM Pics WHERE picid = ?", picId );
+            CassandraHosts.query( "DELETE FROM pictures WHERE id = ?", picId );
             System.out.println( "User.delete(…): Tried to delete " + picId );
           }
       } catch ( NullPointerException e ) {
