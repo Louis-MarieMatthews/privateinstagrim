@@ -47,6 +47,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 @MultipartConfig
 public class Image extends HttpServlet
 {
+  // TODO: remove this field?
   private static final long serialVersionUID = 1L;
   private static final int BYTE_BLOCK = 8192;
   

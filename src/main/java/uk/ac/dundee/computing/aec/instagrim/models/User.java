@@ -23,7 +23,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionExceptio
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.exception.WrongLoginDetailsException;
-import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSHA1;
+import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSha1;
 import uk.ac.dundee.computing.aec.instagrim.lib.Cassandra;
 import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
 
@@ -50,7 +50,7 @@ public class User
     }
     String encodedPassword = null;
     try {
-      encodedPassword = AeSimpleSHA1.SHA1(password);
+      encodedPassword = AeSimpleSha1.sha1(password);
     } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
       System.out.println("Can't check your password");
       return false;
@@ -69,7 +69,7 @@ public class User
   {
     String encodedPassword = null;
     try {
-      encodedPassword = AeSimpleSHA1.SHA1(password);
+      encodedPassword = AeSimpleSha1.sha1(password);
     } catch (UnsupportedEncodingException | NoSuchAlgorithmException et) {
       System.out.println("Can't check your password");
       return false;
@@ -119,7 +119,7 @@ public class User
         int n = list.size();
         String picId;
           for ( int i = 0; i < n; i++ ) {
-            picId = list.get(i).getStringUUID();
+            picId = list.get(i).getStringUuid();
             Cassandra.query( "DELETE FROM pictures WHERE id = ?", picId );
             System.out.println( "User.delete(…): Tried to delete " + picId );
           }

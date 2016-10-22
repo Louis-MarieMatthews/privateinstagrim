@@ -24,7 +24,7 @@ public class Pic
   private ByteBuffer bImage = null;
   private int length;
   private String type;
-  private java.util.UUID UUID = null;
+  private java.util.UUID uuid = null;
   
   
   
@@ -34,16 +34,16 @@ public class Pic
   
   
   
-  public void setUUID(java.util.UUID UUID)
+  public void setUuid(java.util.UUID uuid)
   {
-    this.UUID = UUID;
+    this.uuid = uuid;
   }
   
   
   
-  public String getStringUUID()
+  public String getStringUuid()
   {
-    return UUID.toString();
+    return uuid.toString();
   }
   
   

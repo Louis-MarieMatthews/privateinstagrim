@@ -163,7 +163,7 @@ public class PicModel
       Pic pic = new Pic();
       java.util.UUID uuid = row.getUUID("picture_id");
       System.out.println("UUID" + uuid.toString());
-      pic.setUUID(uuid);
+      pic.setUuid(uuid);
       pics.add(pic);
       }
     }

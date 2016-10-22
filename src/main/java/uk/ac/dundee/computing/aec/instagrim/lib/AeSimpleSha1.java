@@ -20,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-public class AeSimpleSHA1
+public class AeSimpleSha1
 {
   private static String convertToHex(byte[] data)
   {
@@ -42,7 +42,7 @@ public class AeSimpleSHA1
   
   
   
-  public static String SHA1(String string)
+  public static String sha1(String string)
     throws NoSuchAlgorithmException, UnsupportedEncodingException
   {
     MessageDigest md;
