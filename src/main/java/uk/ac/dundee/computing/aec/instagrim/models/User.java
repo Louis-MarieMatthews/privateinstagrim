@@ -96,7 +96,7 @@ public class User
   public static boolean userExists(String username)
     throws NullSessionException, UnavailableSessionException
   {
-    ResultSet rs = CassandraHosts.query("select login from user_profiles where login = ?", username);
+    ResultSet rs = CassandraHosts.query("SELECT login FROM user_profiles WHERE login = ?", username);
     if ( rs.isExhausted() ) {
       return false;
     } else {

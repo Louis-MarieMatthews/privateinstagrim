@@ -83,7 +83,7 @@ public class PicModel
         + "thumbnail_length, processed_length, type, name )"
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         picid, buffer, thumbbuf, processedbuf, user, DateAdded, length, thumblength, processedlength, type, name );
-      CassandraHosts.query( "INSERT INTO user_pictures ( picture_id, user, picture_added ) values ( ?, ?, ? )", picid, user, DateAdded );
+      CassandraHosts.query( "INSERT INTO user_pictures ( picture_id, user, picture_added ) VALUES ( ?, ?, ? )", picid, user, DateAdded );
       
     } catch (IOException ex) {
       System.out.println("Error --> " + ex);
@@ -153,7 +153,7 @@ public class PicModel
     throws NullSessionException, UnavailableSessionException
   {
     java.util.LinkedList<Pic> pics = new java.util.LinkedList<>();
-    ResultSet rs = CassandraHosts.query( "select picture_id from user_pictures where user = ?", user);
+    ResultSet rs = CassandraHosts.query( "SELECT picture_id FROM user_pictures WHERE user = ?", user);
     if (rs.isExhausted()) {
       System.out.println("No Images returned");
       return null;
