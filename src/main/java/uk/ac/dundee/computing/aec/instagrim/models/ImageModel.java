@@ -60,16 +60,16 @@ public class ImageModel
   public static void insertUserImage(byte[] b, String type, String name, String user)
     throws NullSessionException, UnavailableSessionException
   {
+    System.out.println( "ImageModel#insertUserImage(…): called with type = " + type );
+    String types[] = Convertors.splitPath(type);
+    ByteBuffer buffer = ByteBuffer.wrap(b);
+    int length = b.length;
+    java.util.UUID imgId = Convertors.getTimeUUID();
+    File file = new File( "/var/tmp/instagrim/" + imgId );
+    FileOutputStream output;
     try {
-      String types[] = Convertors.splitPath(type);
-      ByteBuffer buffer = ByteBuffer.wrap(b);
-      int length = b.length;
-      java.util.UUID imgId = Convertors.getTimeUUID();
-
       //The following is a quick and dirty way of doing this, will fill the disk quickly !
-      Boolean success = (new File("/var/tmp/instagrim/")).mkdirs();
-      FileOutputStream output = new FileOutputStream(new File("/var/tmp/instagrim/" + imgId));
-
+      output = new FileOutputStream( file );
       output.write(b);
       byte[] thumbb = resizeUserImage(imgId.toString(), types[1]);
       int thumblength = thumbb.length;
@@ -87,9 +87,22 @@ public class ImageModel
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         imgId, buffer, thumbbuf, processedbuf, user, dateAdded, length, thumblength, processedlength, type, name );
       Cassandra.query( "INSERT INTO user_images ( image_id, user, image_added ) VALUES ( ?, ?, ? )", imgId, user, dateAdded );
-      
+      output.close();
     } catch (IOException ex) {
       System.out.println("Error --> " + ex);
+    }
+    finally {
+      
+      if ( file.exists() ) {
+        System.out.println( "ImageModel#insertUserImage(…]: file exists." );
+      } else {
+        System.out.println( "ImageModel#insertUserImage(…]: FILE DOES NOT EXIST." );
+      }
+      if ( file.delete() ) {
+        System.out.println( "ImageModel#insertUserImage(…]: file has been deleted." );
+      } else {
+        System.out.println( "ImageModel#insertUserImage(…]: FILE HASN'T BEEN DELETED." );
+      }
     }
   }
   
@@ -97,10 +110,11 @@ public class ImageModel
   
   public static byte[] resizeUserImage(String imgId, String type)
   {
+    BufferedImage bi;
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();;
     try {
-      BufferedImage bi = ImageIO.read(new File("/var/tmp/instagrim/" + imgId));
+      bi = ImageIO.read(new File("/var/tmp/instagrim/" + imgId));
       BufferedImage thumbnail = createThumbnail(bi);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ImageIO.write(thumbnail, type, baos);
       baos.flush();
 

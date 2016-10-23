@@ -71,7 +71,6 @@ public class Image extends HttpServlet
   public void init(ServletConfig config)
     throws ServletException
   {
-    // TODO Auto-generated method stub
   }
   
   
@@ -83,41 +82,32 @@ public class Image extends HttpServlet
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
-    // TODO Auto-generated method stub
     String[] args = Convertors.splitPath(request.getRequestURI());
     for ( String row : args ) {
       System.out.println( "Image#doGet(…): args[] = " + row );
     }
     if (args.length>2) {
-      if ( args[1].equals( "image" ) ) {
-        try {
-          displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
-        } catch (NoUseableSessionException e) {
-          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+      try {
+        if ( args[1].equals( "image" ) ) {
+            displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
+        }
+        else if ( args[1].equals( "images" ) ) {
+            displayImageList(args[2], request, response);
           return;
         }
-      }
-      else if ( args[1].equals( "images" ) ) {
-        try {
-          displayImageList(args[2], request, response);
-        } catch (NoUseableSessionException e) {
-          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+        else if ( args[1].equals( "thumb" ) ) {
+            displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
         }
-        return;
+        else {
+          response.sendError(500);
+        }
       }
-      else if ( args[1].equals( "thumb" ) ) {
-          try {
-          displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
-          } catch (NoUseableSessionException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-            return;
-          }
+      catch (NoUseableSessionException e) {
+              response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR ); 
       }
-      else {
-        error("Bad Operator", response);
-      }
-    } else {
-      response.sendError(404);
+    }
+    else {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
   
@@ -176,7 +166,7 @@ public class Image extends HttpServlet
        * Between each reading, the result is added to the response OutputStream.
        * See: https://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html#read(byte[])
        */
-      for (int length = 0; (length = input.read(buffer)) > 0;) {
+      for ( int length = 0; (length = input.read(buffer)) > 0; ) {
         out.write(buffer, 0, length);
       }
       out.close();
@@ -186,7 +176,6 @@ public class Image extends HttpServlet
       RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/ImageNotFound.jsp");
       rd.forward(request, response);
     }
-
   }
   
   
@@ -220,7 +209,7 @@ public class Image extends HttpServlet
         System.out.println("Length : " + b.length);
         try {
           ImageModel.insertUserImage(b, type, filename, username);
-          request.setAttribute( "confirmation_message", "Your image has been uploaded sucessfully." );
+          // request.setAttribute( "confirmation_message", "Your image has been uploaded sucessfully." );
           System.out.println( "Image#doPost(…): Upload successful. Forwarding…" );
           response.sendRedirect( ((HttpServletRequest)request).getContextPath() + "/images/" + LoggedIn.getUsername( request ) );
         }
