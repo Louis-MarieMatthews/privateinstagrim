@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
  * @author Andy Cobley, Louis-Marie Matthews
  * @version 1.0.1
  */
-public class Pic
+public class UserImage
 {
   private ByteBuffer bImage = null;
   private int length;
@@ -31,7 +31,8 @@ public class Pic
   
   
   
-  public void Pic()
+  //TODO: remove method
+  public void UserImage()
   {
   }
   
@@ -51,7 +52,7 @@ public class Pic
   
   
   
-  public void setPic(ByteBuffer bImage, int length, String type)
+  public void set(ByteBuffer bImage, int length, String type)
   {
     this.bImage = bImage;
     this.length = length;

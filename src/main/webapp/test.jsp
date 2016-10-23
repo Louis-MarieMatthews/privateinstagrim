@@ -16,7 +16,7 @@
   <body>
     <h1>Hello World!</h1>
     <%
-      Pic ps = new Pic();
+      UserImage img = new UserImage();
       LoggedIn lg = new LoggedIn();
     %>
   </body>

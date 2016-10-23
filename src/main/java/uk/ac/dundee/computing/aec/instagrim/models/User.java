@@ -28,7 +28,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.UsernameTakenException;
 import uk.ac.dundee.computing.aec.instagrim.exception.WrongLoginDetailsException;
 import uk.ac.dundee.computing.aec.instagrim.lib.AeSimpleSha1;
 import uk.ac.dundee.computing.aec.instagrim.lib.Cassandra;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aec.instagrim.stores.UserImage;
 
 /**
  * A model class to acess database-stored users.
@@ -114,20 +114,20 @@ public class User
   {
     System.out.println("User.delete(…): called. username = " + username );
     if ( isValidUser( username, password ) ) {
-      Cassandra.query("DELETE FROM user_pictures WHERE user = ?", username);
+      Cassandra.query("DELETE FROM user_images WHERE user = ?", username);
       Cassandra.query("DELETE FROM user_profiles WHERE login = ?", username);
       
-      LinkedList<Pic> list = PicModel.getPicsForUser(username);
+      LinkedList<UserImage> list = ImageModel.getImagesForUser(username);
       try {
         int n = list.size();
-        String picId;
+        String imgId;
           for ( int i = 0; i < n; i++ ) {
-            picId = list.get(i).getStringUuid();
-            Cassandra.query( "DELETE FROM pictures WHERE id = ?", picId );
-            System.out.println( "User.delete(…): Tried to delete " + picId );
+            imgId = list.get(i).getStringUuid();
+            Cassandra.query("DELETE FROM images WHERE id = ?", imgId );
+            System.out.println("User.delete(…): Tried to delete " + imgId );
           }
       } catch ( NullPointerException e ) {
-        System.out.println( "User.delete(…): No pics found for " + username + ".");
+        System.out.println( "User.delete(…): No images found for " + username + ".");
       }
     } else {
       throw new WrongLoginDetailsException();

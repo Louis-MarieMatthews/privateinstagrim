@@ -37,10 +37,10 @@ import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
-import uk.ac.dundee.computing.aec.instagrim.models.PicModel;
+import uk.ac.dundee.computing.aec.instagrim.models.ImageModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
 import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
-import uk.ac.dundee.computing.aec.instagrim.stores.Pic;
+import uk.ac.dundee.computing.aec.instagrim.stores.UserImage;
 
 /**
  * Servlet implementation class Image
@@ -141,8 +141,8 @@ public class Image extends HttpServlet
   
   
   /**
-   * Forward to response to UsersPics.jsp along with the images uploaded by a
-   * user UsersPics.jsp will display.
+   * Forward to response to UsersImages.jsp along with the images uploaded by a
+   * user UsersImages.jsp will display.
    * 
    * @param user the use whose images will be displayed
    * @param request
@@ -153,10 +153,10 @@ public class Image extends HttpServlet
   private void displayImageList(String user, HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
-    java.util.LinkedList<Pic> lsPics = PicModel.getPicsForUser(user);
-    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersPics.jsp");
+    java.util.LinkedList<UserImage> lsImgs = ImageModel.getImagesForUser(user);
+    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersImages.jsp");
     // TODO: camecalse
-    request.setAttribute("Pics", lsPics);
+    request.setAttribute("images", lsImgs);
     rd.forward(request, response);
   }
   
@@ -176,7 +176,7 @@ public class Image extends HttpServlet
     throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
     try {
-      Pic p = PicModel.getPic(type, java.util.UUID.fromString(image));
+      UserImage p = ImageModel.getUserImage(type, java.util.UUID.fromString(image));
       if ( p == null ) {
         throw new IllegalArgumentException();
       }
@@ -211,7 +211,7 @@ public class Image extends HttpServlet
   
   
   /**
-   * Adds a new pic to the website.
+   * Adds a new img to the website.
    * 
    * @param request
    * @param response
@@ -238,9 +238,9 @@ public class Image extends HttpServlet
         byte[] b = new byte[i + 1];
         is.read(b);
         System.out.println("Length : " + b.length);
-        PicModel tm = new PicModel();
+        ImageModel tm = new ImageModel();
         try {
-          tm.insertPic(b, type, filename, username);
+          tm.insertUserImage(b, type, filename, username);
           request.setAttribute( "message", "Your image has been uploaded sucessfully." );
         } catch ( NoUseableSessionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );

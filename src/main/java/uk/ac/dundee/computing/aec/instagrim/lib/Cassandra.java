@@ -120,15 +120,16 @@ public final class Cassandra
   {
     try {
       //Add some keyspaces here
+      //TODO keyspace in uppercase
       String createKeyspace = "CREATE keyspace IF NOT EXISTS instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
-      String createPicTable = "CREATE TABLE IF NOT EXISTS instagrim.pictures ("
+      String createImgTable = "CREATE TABLE IF NOT EXISTS instagrim.images ("
           + " user VARCHAR,"
           + " id UUID, "
           + " interaction_time TIMESTAMP,"
           + " title VARCHAR,"
           + " image BLOB,"
-          + " thumbnail TEXT,"
-          + " processed TEXT,"
+          + " thumbnail BLOB,"
+          + " processed BLOB,"
           + " image_length INT,"
           + " thumbnail_length INT,"
           + " processed_length INT,"
@@ -136,12 +137,12 @@ public final class Cassandra
           + " name VARCHAR,"
           + " PRIMARY KEY (id)"
           + ")";
-      String createUserPicList = "CREATE TABLE IF NOT EXISTS instagrim.user_pictures (\n"
-          + "picture_id UUID,\n"
+      String createUserImgList = "CREATE TABLE IF NOT EXISTS instagrim.user_images (\n"
+          + "image_id UUID,\n"
           + "user VARCHAR,\n"
-          + "picture_added TIMESTAMP,\n"
-          + "PRIMARY KEY (user, picture_added)\n"
-          + ") WITH CLUSTERING ORDER BY (picture_added desc);";
+          + "image_added TIMESTAMP,\n"
+          + "PRIMARY KEY (user, image_added)\n"
+          + ") WITH CLUSTERING ORDER BY (image_added desc);";
       String createAddressType = "CREATE TYPE IF NOT EXISTS instagrim.address (\n"
           + "street TEXT,\n"
           + "city TEXT,\n"
@@ -169,21 +170,21 @@ public final class Cassandra
       }
 
       //now add some column families 
-      System.out.println("" + createPicTable);
+      System.out.println("" + createImgTable);
 
       try {
-        SimpleStatement cqlQuery = new SimpleStatement(createPicTable);
+        SimpleStatement cqlQuery = new SimpleStatement(createImgTable);
         session.execute(cqlQuery);
       } catch (Exception et) {
         System.out.println("Can't create tweet table " + et);
       }
-      System.out.println("" + createUserPicList);
+      System.out.println("" + createUserImgList);
 
       try {
-        SimpleStatement cqlQuery = new SimpleStatement(createUserPicList);
+        SimpleStatement cqlQuery = new SimpleStatement(createUserImgList);
         session.execute(cqlQuery);
       } catch (Exception et) {
-        System.out.println("Can't create user pic list table " + et);
+        System.out.println("Can't create user img list table " + et);
       }
       System.out.println("" + createAddressType);
       try {
