@@ -80,15 +80,23 @@ public class ExtensionConcealmentFilter
   {
   }
   
+  
+  
+  /**
+   * The URL patterns of all the context's servlets converted in regex. To
+   * update each time there is an update affecting them.
+   * @return the URL patterns of all the context's servlets converted in regex
+   */
   private static String[] getAllServletUrlPatterns() {
     String[] getAllServletUrlPatterns = {
       "/delete-account",
-      "/image/.*",
-      "/thumb/.*",
-      "/images/.*",
+      "/image/.+",
+      "/thumb/.+",
+      "/images/.+",
       "/login",
-      "/login/*",
-      "/register"
+      "/login/.+",
+      "/register",
+      "/delete-image/.+"
     };
     return getAllServletUrlPatterns;
   }

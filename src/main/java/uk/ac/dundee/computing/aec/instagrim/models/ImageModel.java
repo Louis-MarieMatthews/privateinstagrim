@@ -39,13 +39,17 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.imgscalr.Scalr;
+import uk.ac.dundee.computing.aec.instagrim.exception.InsufficientPermissionsException;
 import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 
 import uk.ac.dundee.computing.aec.instagrim.lib.Cassandra;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
+import uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn;
 import uk.ac.dundee.computing.aec.instagrim.stores.UserImage;
 
 //import uk.ac.dundee.computing.aec.stores.TweetStore;
@@ -216,7 +220,7 @@ public class ImageModel
    * @return the maching image
    * @throws uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException 
    */
-  public static UserImage getUserImage(int imageType, java.util.UUID imageId)
+  public static UserImage getUserImage( int imageType, java.util.UUID imageId )
     throws InvalidImageTypeException, NullSessionException, UnavailableSessionException
   {
     ByteBuffer bImage = null;
@@ -281,5 +285,53 @@ public class ImageModel
       title = rs.one().getString( "title" );
     }
     return title;
+  }
+  
+  
+  
+  /**
+   * Checks if the currently logged-in user (static data in LoggedIn class) is
+   * the owner of the specified image.
+   * 
+   * @param uuid the uuid of the mentioned image
+   * @return true if they are the owner, false otherwise
+   */
+  public static boolean isOwner( java.util.UUID uuid, String user )
+    throws NullSessionException, UnavailableSessionException
+  {
+    System.out.println( "ImageModel#checkPermissions(…): called with user = " + user );
+    ResultSet rs = Cassandra.query( "SELECT user FROM user_images WHERE image_id = ?", uuid );
+    String owner = rs.one().getString( "user" );
+    System.out.println( "ImageModel#checkPermissions(…): owner = " + owner );
+    if ( owner.equals( user ) ) {
+      System.out.println( "ImageModel#checkPermissions(…): owner and users are the same." );
+      return true;
+    } else {
+      System.out.println( "ImageModel#checkPermissions(…): USER IS NOT THE OWNER" );
+      return false;
+    }
+  }
+  
+  
+  
+  /**
+   * Rename the designed image, provided that the current logged-in user is its 
+   * owner.
+   * 
+   */
+  public static void rename( java.util.UUID uuid, String newName,
+                             String user )
+    throws NullSessionException, UnavailableSessionException,
+           InsufficientPermissionsException
+  {
+    System.out.println( "ImageModel#rename(…): called" );
+    System.out.println( "ImageModel#rename(…): newName = " + newName );
+    System.out.println( "ImageModel#rename(…): user" + user );
+    if ( isOwner( uuid, user ) ) {
+     System.out.println( "ImageModel#rename(…): is owner. Proceeding to renaming…" );
+      Cassandra.query( "UPDATE images SET title = ? WHERE id = ?;", newName, uuid );
+    } else {
+      throw new InsufficientPermissionsException();
+    }
   }
 }

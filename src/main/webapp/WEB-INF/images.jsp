@@ -36,8 +36,11 @@
 
       %>
       <p><%=ImageModel.getTitle(uuid)%></p>
-      <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=uuid%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=uuid%>"></a><br/><%
-
+      <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=uuid%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=uuid%>"></a><br/>
+      <%
+        if ( ImageModel.isOwner(uuid, LoggedIn.getUsername(request))) { %>
+         <a href="<%=((HttpServletRequest)request).getContextPath()%>/edit-image/<%=uuid%>">Edit image</a>
+     <% }
           }
         }
       %>

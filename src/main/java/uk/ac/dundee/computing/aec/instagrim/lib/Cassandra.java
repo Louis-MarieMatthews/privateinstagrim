@@ -155,6 +155,7 @@ public final class Cassandra
           + "email SET<TEXT>,\n"
           + "addresses  MAP<TEXT, FROZEN <address>>\n"
           + ");";
+      String createIndexUserProfile = "CREATE INDEX ON instagrim.user_images (image_id);";
       Session session = c.connect();
       try {
         PreparedStatement statement = session
@@ -182,7 +183,10 @@ public final class Cassandra
       try {
         SimpleStatement cqlQuery = new SimpleStatement(createUserImgList);
         session.execute(cqlQuery);
-      } catch (Exception et) {
+        SimpleStatement indexes = new SimpleStatement( createIndexUserProfile );
+        session.execute( indexes );
+      }
+      catch (Exception et) {
         System.out.println("Can't create user img list table " + et);
       }
       System.out.println("" + createAddressType);

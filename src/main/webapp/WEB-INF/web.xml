@@ -119,6 +119,12 @@
     
     
     <filter-mapping>
+      <filter-name>protectpages</filter-name>
+      <url-pattern>/edit-image/*</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
       <filter-name>protectpagesfromusers</filter-name>
       <url-pattern>/register</url-pattern>
     </filter-mapping>
@@ -203,6 +209,15 @@
       <description></description>
       <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.Register</servlet-class>
     </servlet>
+    
+
+    <servlet>
+      <servlet-name>editimage</servlet-name>
+      <description></description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.EditImage</servlet-class>
+    </servlet>
+    
+    
     <!-- Define mappings that are used by the servlet container to
          translate a particular request URI (context-relative) to a
          particular servlet.  The examples below correspond to the
@@ -261,6 +276,12 @@
     <servlet-mapping>
       <servlet-name>register</servlet-name>
       <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>editimage</servlet-name>
+      <url-pattern>/edit-image/*</url-pattern>
     </servlet-mapping>
     
     

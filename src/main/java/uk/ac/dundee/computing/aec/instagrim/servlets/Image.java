@@ -204,7 +204,11 @@ public class Image extends HttpServlet
     
     for (Part part : request.getParts()) {
       System.out.println("Image#doPost( … ): part name: " + part.getName());
-
+      if ( ! part.getName().equals( "upfile" ) ) {
+        System.out.println("Image#doPost( … ): not the file upload input" );
+        continue;
+      }
+      
       String type = part.getContentType();
       System.out.println( "Image#doPost(…): type = " + part );
       
