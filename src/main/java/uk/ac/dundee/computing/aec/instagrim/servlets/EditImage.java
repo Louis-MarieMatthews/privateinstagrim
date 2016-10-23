@@ -44,6 +44,7 @@ import uk.ac.dundee.computing.aec.instagrim.stores.UserImage;
 public class EditImage extends HttpServlet
 {
   private UUID uuid;
+  private String[] params;
   
   
   
@@ -86,17 +87,32 @@ public class EditImage extends HttpServlet
     
     checkRequest( request, response );
     
-    String title = request.getParameter( "title" );
     
-    try {
-      ImageModel.rename( uuid, title, LoggedIn.getUsername(request) );
+    if ( params[1].equals( "delete-image" ) ) {
+      try {
+        ImageModel.delete( uuid, LoggedIn.getUsername( request ) );
+        request.setAttribute( "confirmation_message", "Your image has been deleted." );
+        RequestDispatcher rd = request.getRequestDispatcher( "/" );
+        rd.forward(request, response);
+      }
+      catch (NoUseableSessionException | InsufficientPermissionsException ex) {
+        System.out.println( "EditImage#doPost(…): " + ex );
+        // prevent the user from knowing too much about the system.
+        response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+      }
     }
-    catch (NoUseableSessionException | InsufficientPermissionsException ex) {
-      System.out.println( "EditImage#doPost(…): " + ex );
-      // prevent the user from knowing too much about the system.
-      response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+    else {
+      String title = request.getParameter( "title" );
+      try {
+        ImageModel.rename( uuid, title, LoggedIn.getUsername(request) );
+      }
+      catch (NoUseableSessionException | InsufficientPermissionsException ex) {
+        System.out.println( "EditImage#doPost(…): " + ex );
+        // prevent the user from knowing too much about the system.
+        response.sendError( HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+      }
+      doGet( request, response );
     }
-    doGet( request, response );
   }
   
   
@@ -114,20 +130,20 @@ public class EditImage extends HttpServlet
                                    HttpServletResponse response )
     throws IOException, ServletException
   {
-    String[] parameters = Convertors.splitPath( request.getRequestURI() );
-    for ( String c : parameters ) {
+    params = Convertors.splitPath( request.getRequestURI() );
+    for ( String c : params ) {
       System.out.println( "EditImage#doGet(…): parameter : " + c );
     }
     
     // if url is not like context/edit-image/uuid
-    if ( parameters.length != 3 ) {
+    if ( params.length != 3 ) {
       System.out.println( "EditImage#doGet(…): invalid number of parameters" );
       response.sendError( HttpServletResponse.SC_NOT_FOUND );
       return;
     }
     
     try {
-      uuid = UUID.fromString( parameters[2] );
+      uuid = UUID.fromString( params[2] );
     }
     catch( IllegalArgumentException e ) {
       System.out.println( "EditImage#doGet(…): The requested image does not exist." );

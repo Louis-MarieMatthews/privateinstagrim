@@ -34,6 +34,9 @@
         <input type="submit" value="Update" />
         <input type="reset" value="Reset" />
       </form>
+      <form method="POST" action="<%=context%>/delete-image/<%=uuid%>">
+        <input type="submit" value="Delete image" />
+      </form>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

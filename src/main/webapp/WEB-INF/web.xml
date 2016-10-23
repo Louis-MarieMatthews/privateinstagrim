@@ -125,6 +125,12 @@
     
     
     <filter-mapping>
+      <filter-name>protectpages</filter-name>
+      <url-pattern>/delete-image/*</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
       <filter-name>protectpagesfromusers</filter-name>
       <url-pattern>/register</url-pattern>
     </filter-mapping>
@@ -282,6 +288,12 @@
     <servlet-mapping>
       <servlet-name>editimage</servlet-name>
       <url-pattern>/edit-image/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>editimage</servlet-name>
+      <url-pattern>/delete-image/*</url-pattern>
     </servlet-mapping>
     
     

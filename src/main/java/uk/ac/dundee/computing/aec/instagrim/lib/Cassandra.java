@@ -136,12 +136,13 @@ public final class Cassandra
           + " name VARCHAR,"
           + " PRIMARY KEY (id)"
           + ")";
-      String createUserImgList = "CREATE TABLE IF NOT EXISTS instagrim.user_images (\n"
-          + "image_id UUID,\n"
-          + "user VARCHAR,\n"
-          + "image_added TIMESTAMP,\n"
-          + "PRIMARY KEY (user, image_added)\n"
-          + ") WITH CLUSTERING ORDER BY (image_added desc);";
+      String createUserImgList = "CREATE TABLE IF NOT EXISTS instagrim.user_images ("
+          + "image_id UUID, "
+          + "user VARCHAR, "
+          + "interaction_time TIMESTAMP, "
+          + "PRIMARY KEY ( image_id ) );";//\n"
+          // + ") WITH CLUSTERING ORDER BY (interaction_time desc);";
+      String createIndexImgList = "CREATE INDEX ON instagrim.user_images ( user );";
       String createAddressType = "CREATE TYPE IF NOT EXISTS instagrim.address (\n"
           + "street TEXT,\n"
           + "city TEXT,\n"
@@ -155,7 +156,6 @@ public final class Cassandra
           + "email SET<TEXT>,\n"
           + "addresses  MAP<TEXT, FROZEN <address>>\n"
           + ");";
-      String createIndexUserProfile = "CREATE INDEX ON instagrim.user_images (image_id);";
       Session session = c.connect();
       try {
         PreparedStatement statement = session
@@ -183,7 +183,7 @@ public final class Cassandra
       try {
         SimpleStatement cqlQuery = new SimpleStatement(createUserImgList);
         session.execute(cqlQuery);
-        SimpleStatement indexes = new SimpleStatement( createIndexUserProfile );
+        SimpleStatement indexes = new SimpleStatement( createIndexImgList );
         session.execute( indexes );
       }
       catch (Exception et) {

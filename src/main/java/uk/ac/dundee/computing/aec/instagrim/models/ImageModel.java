@@ -27,6 +27,7 @@ package uk.ac.dundee.computing.aec.instagrim.models;
  * To manually generate a UUID use:
  * http://www.famkruithof.net/uuid/uuidgen
  */
+import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
@@ -90,7 +92,7 @@ public class ImageModel
         + "thumbnail_length, processed_length, type, name )"
         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         imgId, title, buffer, thumbbuf, processedbuf, user, dateAdded, length, thumblength, processedlength, type, name );
-      Cassandra.query( "INSERT INTO user_images ( image_id, user, image_added ) VALUES ( ?, ?, ? )", imgId, user, dateAdded );
+      Cassandra.query( "INSERT INTO user_images ( image_id, user, interaction_time ) VALUES ( ?, ?, ? )", imgId, user, dateAdded );
       output.close();
     } catch (IOException ex) {
       
@@ -107,12 +109,12 @@ public class ImageModel
       if ( file.exists() ) {
         System.out.println( "ImageModel#insertUserImage(…]: file exists." );
       } else {
-        System.out.println( "ImageModel#insertUserImage(…]: FILE DOES NOT EXIST." );
+        System.out.println( "ImageModel#insertUserImage(…]: FILE DOES NOT EXIST." );
       }
       if ( file.delete() ) {
         System.out.println( "ImageModel#insertUserImage(…]: file has been deleted." );
       } else {
-        System.out.println( "ImageModel#insertUserImage(…]: FILE HASN'T BEEN DELETED." );
+        System.out.println( "ImageModel#insertUserImage(…]: FILE HASN'T BEEN DELETED." );
       }
     }
   }
@@ -203,7 +205,7 @@ public class ImageModel
     else {
       for (Row row : rs) {
       java.util.UUID uuid = row.getUUID("image_id");
-      System.out.println("ImageModel#getImagesUuidForUser: UUID found : " + uuid.toString());
+      System.out.println("ImageModel#getImagesUuidForUser: UUID found : " + uuid.toString());
       uuids.add(uuid);
       }
     }
@@ -216,7 +218,7 @@ public class ImageModel
    * Returns the image stored in the database with the specified image id.
    * 
    * @param imageType the type of the image (0: image, 1: thumbnail, 2: proccessed)
-   * @param imageId the UUID of the image
+   * @param imageId the UUID of the image
    * @return the maching image
    * @throws uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException 
    */
@@ -307,7 +309,7 @@ public class ImageModel
       System.out.println( "ImageModel#checkPermissions(…): owner and users are the same." );
       return true;
     } else {
-      System.out.println( "ImageModel#checkPermissions(…): USER IS NOT THE OWNER" );
+      System.out.println( "ImageModel#checkPermissions(…): USER IS NOT THE OWNER" );
       return false;
     }
   }
@@ -330,6 +332,29 @@ public class ImageModel
     if ( isOwner( uuid, user ) ) {
      System.out.println( "ImageModel#rename(…): is owner. Proceeding to renaming…" );
       Cassandra.query( "UPDATE images SET title = ? WHERE id = ?;", newName, uuid );
+    } else {
+      throw new InsufficientPermissionsException();
+    }
+  }
+  
+  
+  
+  /**
+   * Delete the designed image, provided that the current logged-in user is its 
+   * owner.
+   * 
+   */
+  public static void delete( java.util.UUID uuid,String user )
+    throws NullSessionException, UnavailableSessionException,
+           InsufficientPermissionsException
+  {
+    System.out.println( "ImageModel#delete(…): called" );
+    System.out.println( "ImageModel#delete(…): user" + user );
+    if ( isOwner( uuid, user ) ) {
+      System.out.println( "ImageModel#delete(…): is owner. Proceeding to deleting…" );
+      // TODO TRANSACTION
+      Cassandra.query( "DELETE FROM images WHERE id = ?;", uuid );
+      Cassandra.query( "DELETE FROM user_images WHERE image_id = ?;", uuid );
     } else {
       throw new InsufficientPermissionsException();
     }
