@@ -117,12 +117,12 @@ public class User
       Cassandra.query("DELETE FROM user_images WHERE user = ?", username);
       Cassandra.query("DELETE FROM user_profiles WHERE login = ?", username);
       
-      LinkedList<UserImage> list = ImageModel.getImagesForUser(username);
+      LinkedList<java.util.UUID> list = ImageModel.getImagesUuidForUser(username);
       try {
         int n = list.size();
         String imgId;
           for ( int i = 0; i < n; i++ ) {
-            imgId = list.get(i).getStringUuid();
+            imgId = list.get(i).toString();
             Cassandra.query("DELETE FROM images WHERE id = ?", imgId );
             System.out.println("User.delete(…): Tried to delete " + imgId );
           }

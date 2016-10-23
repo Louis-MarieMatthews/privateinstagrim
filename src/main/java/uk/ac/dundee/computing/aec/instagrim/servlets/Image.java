@@ -125,9 +125,9 @@ public class Image extends HttpServlet
     throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
     System.out.println( "Image#displayImageList(…): called with user = " + user );
-    java.util.LinkedList<UserImage> lsImgs = ImageModel.getImagesForUser(user);
+    java.util.LinkedList<java.util.UUID> lsImgsUuid = ImageModel.getImagesUuidForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/images.jsp" );
-    request.setAttribute( "images", lsImgs );
+    request.setAttribute( "images_uuid", lsImgsUuid );
     rd.forward( request, response );
   }
   
@@ -192,6 +192,16 @@ public class Image extends HttpServlet
     throws ServletException, IOException
   {
     System.out.println( "Image#doPost( … ): called." );
+    
+    String title;
+    if ( request.getParameter( "image_title") == null ) {
+      title = null;
+    }
+    else {
+      title = request.getParameter( "image_title");
+    }
+    System.out.println( "Image#doPost( … ): title = " + title );
+    
     for (Part part : request.getParts()) {
       System.out.println("Image#doPost( … ): part name: " + part.getName());
 
@@ -206,9 +216,9 @@ public class Image extends HttpServlet
       if (i > 0) {
         byte[] b = new byte[i + 1];
         is.read(b);
-        System.out.println("Length : " + b.length);
+        System.out.println("Image#doPost(…): b.length = " + b.length);
         try {
-          ImageModel.insertUserImage(b, type, filename, username);
+          ImageModel.insertUserImage(b, type, filename, username, title );
           // request.setAttribute( "confirmation_message", "Your image has been uploaded sucessfully." );
           System.out.println( "Image#doPost(…): Upload successful. Forwarding…" );
           response.sendRedirect( ((HttpServletRequest)request).getContextPath() + "/images/" + LoggedIn.getUsername( request ) );
@@ -222,7 +232,10 @@ public class Image extends HttpServlet
             + "of the accepted types of image." );
           rd.forward(request, response);
         }
-        is.close();
+        finally {
+          System.out.println( "Image#doPost(…): is.close()…" );
+          is.close();
+        }
       }
     }
   }

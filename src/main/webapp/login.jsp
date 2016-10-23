@@ -27,8 +27,8 @@
             %>
       <form method="POST"  action="<%=((HttpServletRequest)request).getContextPath()%>/login">
         <ul>
-          <li>User Name <input type="text" name="username" required></li>
-          <li>Password <input type="password" name="password" required></li>
+          <li><label for="username">Username: </label><input type="text" name="username" id="username" required></li>
+          <li><label for="password">Password: </label><input type="password" name="password" id="password" required></li>
         </ul>
         <br/>
         <%

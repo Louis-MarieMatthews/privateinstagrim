@@ -30,6 +30,8 @@
       <form method="POST" enctype="multipart/form-data" action="<%=((HttpServletRequest)request).getContextPath()%>/images/<%=username%>">
         <label for="upfile">File to upload: </label><input type="file" name="upfile" id="upfile" required><br/>
         <br/>
+        <label for="image_title">Image title: </label><input type="text" id="image_title" name="image_title" />
+        <br/>
         <input type="submit" value="Press"> to upload the file!
       </form>
     </main>

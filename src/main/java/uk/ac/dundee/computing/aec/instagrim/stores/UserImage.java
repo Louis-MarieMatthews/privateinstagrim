@@ -28,22 +28,17 @@ public class UserImage
   private int length;
   private String type;
   private java.util.UUID uuid = null;
+  private String title;
   
   
   
   
-  public UserImage()
-  {
-  }
-  
-  
-  
-  
-  public UserImage(ByteBuffer bImage, int length, String type)
+  public UserImage(ByteBuffer bImage, int length, String type, String title)
   {
     this.bImage = bImage;
     this.length = length;
     this.type = type;
+    this.title = title;
   }
   
   
@@ -79,6 +74,12 @@ public class UserImage
   public String getType()
   {
     return type;
+  }
+  
+  
+  
+  public String getTitle() {
+    return title;
   }
   
   

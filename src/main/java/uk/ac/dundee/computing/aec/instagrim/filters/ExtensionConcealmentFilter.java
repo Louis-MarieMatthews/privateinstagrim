@@ -51,11 +51,11 @@ public class ExtensionConcealmentFilter
     
     
     if ( needsToBeManagedByServlet ( request ) ) {
-      System.out.println( "ExtensionConcealmentFilter#doFilter(…) : Request needs to be managed by a servlet or a filter." );
+      System.out.println( "ExtensionConcealmentFilter#doFilter(…) : Request needs to be managed by a servlet." );
       chain.doFilter(request, response);
       return;
     } else {
-      System.out.println( "ExtensionConcealmentFilter#doFilter(…) : THE REQUEST DOES NOT NEED TO BE MANAGED BY A SERVLET OR A FILTER." );
+      System.out.println( "ExtensionConcealmentFilter#doFilter(…) : THE REQUEST DOES NOT NEED TO BE MANAGED BY A SERVLET." );
     }
     
     if ( nonJspFileExists ( request ) ) {
@@ -83,11 +83,9 @@ public class ExtensionConcealmentFilter
   private static String[] getAllServletUrlPatterns() {
     String[] getAllServletUrlPatterns = {
       "/delete-account",
-      "/images",
-      "/image/*",
-      "/thumb/*",
-      "/images",
-      "/images/*",
+      "/image/.*",
+      "/thumb/.*",
+      "/images/.*",
       "/login",
       "/login/*",
       "/register"

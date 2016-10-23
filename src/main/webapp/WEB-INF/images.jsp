@@ -5,10 +5,11 @@
   Page used by the servlet Image. Shouldn't be accessed directly.
 --%>
 
-<%@page import="java.util.*"%>
+<%@page import="uk.ac.dundee.computing.aec.instagrim.models.ImageModel"%>
+<%@page import="java.util.UUID"%>
+<%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%-- TODO: No wildcard in import --%>
-<%@page import="uk.ac.dundee.computing.aec.instagrim.stores.*" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,19 +23,20 @@
     <main>
       <h1>Your Images</h1>
       <%
-        java.util.LinkedList<UserImage> lsImgs = (java.util.LinkedList<UserImage>) request.getAttribute("images");
-        if (lsImgs == null) {
+        java.util.LinkedList<java.util.UUID> uuids = (java.util.LinkedList<java.util.UUID>) request.getAttribute("images_uuid");
+        if (uuids == null) {
       %>
       <p>No Image found</p>
       <%
       } else {
-        Iterator<UserImage> iterator;
-        iterator = lsImgs.iterator();
+        Iterator<java.util.UUID> iterator;
+        iterator = uuids.iterator();
         while (iterator.hasNext()) {
-          UserImage img = (UserImage) iterator.next();
+          java.util.UUID uuid = (java.util.UUID) iterator.next();
 
       %>
-      <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=img.getStringUuid()%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=img.getStringUuid()%>"></a><br/><%
+      <p><%=ImageModel.getTitle(uuid)%></p>
+      <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=uuid%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=uuid%>"></a><br/><%
 
           }
         }

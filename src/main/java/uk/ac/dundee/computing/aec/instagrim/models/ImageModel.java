@@ -57,8 +57,9 @@ import uk.ac.dundee.computing.aec.instagrim.stores.UserImage;
  */
 public class ImageModel
 {
-  public static void insertUserImage(byte[] b, String type, String name, String user)
-    throws NullSessionException, UnavailableSessionException
+  public static void insertUserImage(byte[] b, String type, String name, String user,
+                                     String title)
+    throws NullSessionException, UnavailableSessionException, IOException
   {
     System.out.println( "ImageModel#insertUserImage(…): called with type = " + type );
     String types[] = Convertors.splitPath(type);
@@ -66,9 +67,8 @@ public class ImageModel
     int length = b.length;
     java.util.UUID imgId = Convertors.getTimeUUID();
     File file = new File( "/var/tmp/instagrim/" + imgId );
-    FileOutputStream output;
+    FileOutputStream output = null;
     try {
-      //The following is a quick and dirty way of doing this, will fill the disk quickly !
       output = new FileOutputStream( file );
       output.write(b);
       byte[] thumbb = resizeUserImage(imgId.toString(), types[1]);
@@ -82,17 +82,24 @@ public class ImageModel
       
       
       Cassandra.query( "INSERT INTO images ("
-        + "id, image, thumbnail, processed, user, interaction_time, image_length,"
+        + "id, title, image, thumbnail, processed, user, interaction_time, image_length,"
         + "thumbnail_length, processed_length, type, name )"
-        + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        imgId, buffer, thumbbuf, processedbuf, user, dateAdded, length, thumblength, processedlength, type, name );
+        + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        imgId, title, buffer, thumbbuf, processedbuf, user, dateAdded, length, thumblength, processedlength, type, name );
       Cassandra.query( "INSERT INTO user_images ( image_id, user, image_added ) VALUES ( ?, ?, ? )", imgId, user, dateAdded );
       output.close();
     } catch (IOException ex) {
+      
       System.out.println("Error --> " + ex);
+      if ( output != null ) {
+        output.close();
+      }
+      throw ex;
     }
     finally {
-      
+      if ( output != null ) {
+        output.close();
+      }
       if ( file.exists() ) {
         System.out.println( "ImageModel#insertUserImage(…]: file exists." );
       } else {
@@ -109,6 +116,7 @@ public class ImageModel
   
   
   public static byte[] resizeUserImage(String imgId, String type)
+    throws IOException
   {
     BufferedImage bi;
     ByteArrayOutputStream baos = new ByteArrayOutputStream();;
@@ -122,28 +130,33 @@ public class ImageModel
       baos.close();
       return imageInByte;
     } catch (IOException et) {
-
+      if ( baos != null ) {
+        baos.close();
+      }
+      throw et;
     }
-    return null;
   }
   
   
   
   public static byte[] decolourUserImage(String imageId, String type)
+    throws IOException
   {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       BufferedImage bi = ImageIO.read(new File("/var/tmp/instagrim/" + imageId));
       BufferedImage processed = createProcessed(bi);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
       ImageIO.write(processed, type, baos);
       baos.flush();
+        baos.close();
       byte[] imageInByte = baos.toByteArray();
-      baos.close();
       return imageInByte;
     } catch (IOException et) {
-
+      if ( baos != null ) {
+        baos.close();
+      }
+      throw et;
     }
-    return null;
   }
   
   
@@ -166,66 +179,67 @@ public class ImageModel
   
   
   
-  public static java.util.LinkedList<UserImage> getImagesForUser(String user)
+  /**
+   * Returns the different image UUIDs for a particular user.
+   * 
+   * @param username the user whose image UUIDs to return
+   * @return a list of their image UUIDs
+   * @throws NullSessionException
+   * @throws UnavailableSessionException 
+   */
+  public static java.util.LinkedList<java.util.UUID> getImagesUuidForUser(String username)
     throws NullSessionException, UnavailableSessionException
   {
-    java.util.LinkedList<UserImage> imgs = new java.util.LinkedList<>();
-    ResultSet rs = Cassandra.query( "SELECT image_id FROM user_images WHERE user = ?", user);
+    java.util.LinkedList<java.util.UUID> uuids = new java.util.LinkedList<>();
+    ResultSet rs = Cassandra.query( "SELECT image_id FROM user_images WHERE user = ?", username);
     if (rs.isExhausted()) {
-      System.out.println("No Images returned");
+      System.out.println("ImageModel#getImagesUuidForUser(…): no images returned");
       return null;
     }
     else {
       for (Row row : rs) {
-      UserImage img = new UserImage();
       java.util.UUID uuid = row.getUUID("image_id");
-      System.out.println("UUID" + uuid.toString());
-      img.setUuid(uuid);
-      imgs.add(img);
+      System.out.println("ImageModel#getImagesUuidForUser: UUID found : " + uuid.toString());
+      uuids.add(uuid);
       }
     }
-    return imgs;
+    return uuids;
   }
   
   
   
   /**
+   * Returns the image stored in the database with the specified image id.
    * 
-   * 
-   * @param imageType
-   * @param imageId
-   * @return 
+   * @param imageType the type of the image (0: image, 1: thumbnail, 2: proccessed)
+   * @param imageId the UUID of the image
+   * @return the maching image
    * @throws uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException 
    */
   public static UserImage getUserImage(int imageType, java.util.UUID imageId)
     throws InvalidImageTypeException, NullSessionException, UnavailableSessionException
   {
-    Session session = Cassandra.getSession();
     ByteBuffer bImage = null;
     String type = null;
+    String title = null;
     int length = 0;
     try {
-      Convertors convertor = new Convertors();
       ResultSet rs;
       
-      
-      /**
-       * TODO: What if the given type isn't correct?
-       */
       if (imageType == Convertors.DISPLAY_IMAGE) {
-        rs = Cassandra.query("SELECT image, image_length, type FROM images WHERE id = ?", imageId );
+        rs = Cassandra.query("SELECT title, image, image_length, type FROM images WHERE id = ?", imageId );
       }
       else if (imageType == Convertors.DISPLAY_THUMB) {
-        rs = Cassandra.query("SELECT thumbnail, image_length, thumbnail_length, type FROM images WHERE id = ?", imageId );
+        rs = Cassandra.query("SELECT title, thumbnail, image_length, thumbnail_length, type FROM images WHERE id = ?", imageId );
       }
       else if (imageType == Convertors.DISPLAY_PROCESSED) {
-        rs = Cassandra.query("SELECT processed, processed_length, type FROM images WHERE id = ?", imageId );
+        rs = Cassandra.query("SELECT title, processed, processed_length, type FROM images WHERE id = ?", imageId );
       } else {
         throw new InvalidImageTypeException();
       }
       
       if (rs.isExhausted()) {
-        System.out.println("No Images returned");
+        System.out.println("ImageModel#getUserImage(…): no images returned");
         return null;
       }
       else {
@@ -243,14 +257,29 @@ public class ImageModel
             length = row.getInt("processed_length");
           }
           type = row.getString("type");
+          title = row.getString( "title" );
         }
       }
     } catch (Exception et) {
-      System.out.println("Can't get img " + et);
+      System.out.println("ImageModel#getUserImage(…): " + et);
       return null;
     }
-    UserImage p = new UserImage(bImage, length, type);
-
+    UserImage p = new UserImage(bImage, length, type, title);
+    
     return p;
+  }
+  
+  
+  public static String getTitle( java.util.UUID uuid )
+    throws NullSessionException, UnavailableSessionException
+  {
+    ResultSet rs = Cassandra.query( "SELECT title FROM images WHERE id = ?", uuid );
+    String title;
+    if ( rs.isExhausted() ) {
+      title = "Untitled";
+    } else {
+      title = rs.one().getString( "title" );
+    }
+    return title;
   }
 }
