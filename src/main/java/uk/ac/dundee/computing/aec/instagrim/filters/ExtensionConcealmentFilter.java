@@ -97,6 +97,7 @@ public class ExtensionConcealmentFilter
       "/login/.+",
       "/register",
       "/edit-image/.+",
+      "/profile/.+"
     };
     return getAllServletUrlPatterns;
   }

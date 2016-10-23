@@ -131,6 +131,12 @@
     
     
     <filter-mapping>
+      <filter-name>protectpages</filter-name>
+      <url-pattern>/profile/*</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
       <filter-name>protectpagesfromusers</filter-name>
       <url-pattern>/register</url-pattern>
     </filter-mapping>
@@ -223,6 +229,13 @@
       <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.EditImage</servlet-class>
     </servlet>
     
+
+    <servlet>
+      <servlet-name>profile</servlet-name>
+      <description></description>
+      <servlet-class>uk.ac.dundee.computing.aec.instagrim.servlets.Profile</servlet-class>
+    </servlet>
+    
     
     <!-- Define mappings that are used by the servlet container to
          translate a particular request URI (context-relative) to a
@@ -294,6 +307,12 @@
     <servlet-mapping>
       <servlet-name>editimage</servlet-name>
       <url-pattern>/delete-image/*</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+      <servlet-name>profile</servlet-name>
+      <url-pattern>/profile/*</url-pattern>
     </servlet-mapping>
     
     

@@ -9,11 +9,10 @@
 <%@page import="java.util.UUID"%>
 <%@page import="java.util.Iterator"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%-- TODO: No wildcard in import --%>
 <!DOCTYPE html>
 <html>
   <head>
-    <% request.setAttribute("pageName", "Your Images"); %>
+    <% request.setAttribute("pageName", Images"); %>
     <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
@@ -21,7 +20,7 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     
     <main>
-      <h1>Your Images</h1>
+      <h1>Images</h1>
       <%
         java.util.LinkedList<java.util.UUID> uuids = (java.util.LinkedList<java.util.UUID>) request.getAttribute("images_uuid");
         if (uuids == null) {

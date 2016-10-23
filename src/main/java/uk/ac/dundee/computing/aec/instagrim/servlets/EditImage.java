@@ -53,6 +53,7 @@ public class EditImage extends HttpServlet
     throws ServletException
   {
     uuid = null;
+    params = null;
   }
   
   
@@ -60,6 +61,7 @@ public class EditImage extends HttpServlet
   @Override
   public void destroy() {
     uuid = null;
+    params = null;
   }
   
   

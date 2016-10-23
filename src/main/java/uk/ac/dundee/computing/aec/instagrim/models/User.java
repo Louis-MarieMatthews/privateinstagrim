@@ -133,4 +133,45 @@ public class User
       throw new WrongLoginDetailsException();
     }
   }
+  
+  
+  
+  /**
+   * Checks if the specified user exists.
+   * 
+   * @param username of the user
+   * @return true if the user exists
+   */
+  public static boolean exists( String username )
+    throws NullSessionException, UnavailableSessionException
+  {
+    ResultSet rs = Cassandra.query( "SELECT login FROM user_profiles WHERE login = ?;", username );
+    if ( rs.isExhausted() ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
+  
+  
+  public static String getEmail( String username )
+    throws NullSessionException, UnavailableSessionException
+  {
+    String email = null;
+    try {
+    System.out.println( "User#getEmail(…): username = " + username );
+    ResultSet rs = Cassandra.query( "SELECT email FROM user_profiles WHERE login = ?", username );
+    if ( rs.isExhausted() ) {
+      System.out.println( "User#getEmail(…): no user found. " );
+      email = null;
+    } else {
+      email = rs.one().getString( "email" );
+    }
+    }
+    catch(Throwable t) {
+      System.out.println( "User#getEmail(…): " + t );
+    }
+    return email;
+  }
 }

@@ -153,7 +153,7 @@ public final class Cassandra
           + "password TEXT,\n"
           + "first_name TEXT,\n"
           + "last_name TEXT,\n"
-          + "email SET<TEXT>,\n"
+          + "email VARCHAR,\n"
           + "addresses  MAP<TEXT, FROZEN <address>>\n"
           + ");";
       Session session = c.connect();
