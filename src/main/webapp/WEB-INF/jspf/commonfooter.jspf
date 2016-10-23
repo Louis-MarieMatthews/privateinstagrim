@@ -2,13 +2,18 @@
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
 <%@ page pageEncoding="UTF-8" %>
 
-<footer>
-  <ul>
-    <li class="footer">
-      <a href="<%=((HttpServletRequest)request).getContextPath()%>/">Home</a>
+<footer class="footer">
+  <div class="container">
+    <p class="text-muted">
       <% if ( LoggedIn.isLoggedIn(request) ) { %>
       <a href="<%=((HttpServletRequest)request).getContextPath()%>/delete-account">Account deletion</a>
       <% } %>
-    </li>
-  </ul>
+    </p>
+  </div>
 </footer>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="<%=((HttpServletRequest)request).getContextPath()%>/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>

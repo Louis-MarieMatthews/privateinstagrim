@@ -3,10 +3,10 @@
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
 
 <header>
-      <h1>Instagrim</h1>
-      <h2>Your world in Black and White</h2>
-      <%=Jsp.getAttribute("confirmation_message", request)%>
-      <% if ( LoggedIn.isLoggedIn(request) ) { %>
-      <p>Hello, <%= LoggedIn.getUsername(request) %>.</p>
-      <% } %>
+  <div class="container">
+    <%=Jsp.getAttribute("confirmation_message", request)%>
+    <% if ( LoggedIn.isLoggedIn(request) ) { %>
+    <p>Hello, <%= LoggedIn.getUsername(request) %>.</p>
+    <% } %>
+  </div>
 </header>

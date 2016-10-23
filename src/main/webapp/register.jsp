@@ -4,6 +4,7 @@
   Author   : Andy Cobley, Louis-Marie Matthews
 --%>
 
+<%String context = ((HttpServletRequest)request).getContextPath();%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,24 +17,30 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
     <main>
-      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
-      <h3>Register as user</h3>
-        <%
-          if ( request.getAttribute("details_error") != null ) {
-            %>
-            <p><%=request.getAttribute("details_error") %></p>
-            <%
-          }  
-        %>
-      <form method="POST" action="<%=((HttpServletRequest)request).getContextPath()%>/register">
-        <ul>
-          <li>User Name <input type="text" name="username" required></li>
-          <li>Password <input type="password" name="password" required></li>
-        </ul>
-        <br/>
-        <input type="submit" value="Register"> 
-      </form>
-
+      <div class="container">
+        <h2 class="form-signin-heading">Register as a user</h2>
+        <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
+          <%
+            if ( request.getAttribute("details_error") != null ) {
+              %>
+              <p><%=request.getAttribute("details_error") %></p>
+              <%
+            }
+          %>
+        <form method="POST" action="<%=((HttpServletRequest)request).getContextPath()%>/register">
+          <div class="form-group">
+          <label for="username">Username: </label>
+          <input type="text" name="username" class="sr-only" placeholder="Username" autofocus required>
+          </div>
+          <div class="form-group">
+          <label for="password" class="sr-only">Password: </label>
+          <input type="password" name="password" placeholder="Password" required>
+          </div>
+          <div class="form-group">
+          <button class="btn btn-default" type="submit">Register</button>
+          </div>
+        </form>
+      </div>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

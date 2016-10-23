@@ -22,9 +22,12 @@
     <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     <main>
-      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
-      <h1>User</h1>
-      <p><a href="<%=context%>/profile/<%=randomUser%>"><%=randomUser%></a></p>
+      <div class="container">
+          <h1>User</h1>
+          <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
+          <h2>Check out the pictures of this user!</h2>
+          <p><a href="<%=context%>/profile/<%=randomUser%>"><%=randomUser%></a></p>
+      </div>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

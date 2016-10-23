@@ -5,6 +5,7 @@
 --%>
 
 <%@page import="uk.ac.dundee.computing.aec.instagrim.stores.LoggedIn"%>
+<%String context = ((HttpServletRequest)request).getContextPath();%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -17,7 +18,9 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
     <main>
-      <h1>The requested image has not been found.</h1>
+      <div class="container">
+        <h1>The requested image has not been found.</h1>
+      </div>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

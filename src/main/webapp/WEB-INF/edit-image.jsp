@@ -25,18 +25,29 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     
     <main>
-      <h1>Edit Image</h1>
-      <a href="<%=context%>/image/<%=uuid%>">
-        <img src="<%=context%>/thumb/<%=uuid%>" />
-      </a>
-      <form method="POST" action="<%=context%>/edit-image/<%=uuid%>">
-        <label for="title">Title: </label><input type="text" name="title" id="title" value="<%=ImageModel.getTitle(uuid)%>" />
-        <input type="submit" value="Update" />
-        <input type="reset" value="Reset" />
-      </form>
-      <form method="POST" action="<%=context%>/delete-image/<%=uuid%>">
-        <input type="submit" value="Delete image" />
-      </form>
+      <div class="container">
+        <h1>Edit Image</h1>
+        <p>
+          <a href="<%=context%>/image/<%=uuid%>">
+            <img src="<%=context%>/thumb/<%=uuid%>" />
+          </a>
+        </p>
+        <form method="POST" action="<%=context%>/edit-image/<%=uuid%>">
+          <div class="form-group">
+           <label for="title">Title: </label>
+           <input type="text" name="title" id="title" value="<%=ImageModel.getTitle(uuid)%>" />
+          </div>
+          <div class="form-group">
+           <button type="submit" class="btn btn-default">Update</button>
+            <button type="reset" class="btn btn-default">Reset</button>
+          </div>
+        </form>
+        <form method="POST" action="<%=context%>/delete-image/<%=uuid%>">
+          <div class="form-group">
+            <button class="btn btn-danger" type="submit">Delete image</button>
+          </div>
+        </form>
+      </div>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>

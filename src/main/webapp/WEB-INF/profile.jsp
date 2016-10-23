@@ -23,9 +23,11 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     
     <main>
-      <h1><%=username%></h1>
-      <p><%=User.getEmail(username)%></p>
-      <p><a href="<%=context%>/images/<%=username%>">Images</a></p>
+      <div class="container">
+        <h1><%=username%></h1>
+        <p><%=User.getEmail(username)%></p>
+        <p><a href="<%=context%>/images/<%=username%>">Images</a></p>
+      </div>
     </main>
     
     <%@include file="/WEB-INF/jspf/commonfooter.jspf" %>
