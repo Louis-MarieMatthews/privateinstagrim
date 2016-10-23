@@ -43,6 +43,18 @@ public class Register extends HttpServlet
   
   
   
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException
+  {
+    request.setAttribute( "already_treated", true );
+    System.out.println("Register#doGet(…): called.");
+    RequestDispatcher rd = request.getRequestDispatcher("/register.jsp");
+    rd.forward(request, response);
+  }
+  
+  
+  
   /**
    * Handles the registration process once the user submits the desired
    * credentials of their future account.
@@ -59,6 +71,8 @@ public class Register extends HttpServlet
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
+    request.setAttribute( "already_treated", true );
+    
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     
@@ -69,11 +83,13 @@ public class Register extends HttpServlet
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
       return;
     } catch (UsernameNotAsciiException e) {
+      request.setAttribute( "already_treated", true );
       RequestDispatcher rd = request.getRequestDispatcher("/register.jsp");
       request.setAttribute("details_error", "The username must be an ASCII-US string.");
       rd.forward(request, response);
       return;
     } catch (UsernameTakenException e) {
+      request.setAttribute( "already_treated", true );
       RequestDispatcher rd = request.getRequestDispatcher("/register.jsp");
       request.setAttribute("details_error", "The username already exists.");
       rd.forward(request, response);

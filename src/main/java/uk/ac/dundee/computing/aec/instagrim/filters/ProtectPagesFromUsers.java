@@ -82,6 +82,7 @@ public class ProtectPagesFromUsers
       FilterChain chain)
     throws IOException, ServletException
   {
+    System.out.println( "ProtectPagesFromUsers#doFilter(…) : called." );
     if (DEBUG) {
       log("ProtectPages:doFilter()");
     }
@@ -93,7 +94,7 @@ public class ProtectPagesFromUsers
     System.out.println("Session in filter " + session);
     if (li != null && li.isLoggedIn()) {
       System.out.println("Forward to index (already logged in)");
-      RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
+      RequestDispatcher rd = request.getRequestDispatcher("/");
       rd.forward(request, response);
       doAfterProcessing(request, response);
     } else {

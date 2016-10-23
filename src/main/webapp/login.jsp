@@ -23,8 +23,8 @@
             <p><%=request.getAttribute("details_error") %></p>
             <%
           }  
-        %>
-      <form method="POST"  action="Login">
+            %>
+      <form method="POST"  action="/Instagrim/login">
         <ul>
           <li>User Name <input type="text" name="username" required></li>
           <li>Password <input type="password" name="password" required></li>

@@ -79,7 +79,7 @@ public class User
     }
     ResultSet rs = Cassandra.query( "SELECT password FROM user_profiles WHERE login = ?", username );
     if (rs.isExhausted()) {
-      System.out.println("No Images returned");
+      System.out.println("User#isValidUser: NO USER RETURNED.");
       return false;
     }
     else {

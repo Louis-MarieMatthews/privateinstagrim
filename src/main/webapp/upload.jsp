@@ -23,9 +23,10 @@
             %>
             <p><%=request.getAttribute("message") %></p>
             <%
-          }  
+          }
+          String username = LoggedIn.getUsername(request);
         %>
-      <form method="POST" enctype="multipart/form-data" action="Image">
+      <form method="POST" enctype="multipart/form-data" action="/Instagrim/images/<%=username%>">
         <label for="upfile">File to upload: </label><input type="file" name="upfile" id="upfile" required><br/>
         <br/>
         <input type="submit" value="Press"> to upload the file!

@@ -5,13 +5,13 @@
 
     <nav>
       <ul>
-        <li><a href="/Instagrim/upload.jsp">Upload</a></li>
+        <li><a href="/Instagrim/upload">Upload</a></li>
           <% if (LoggedIn.isLoggedIn(request) ) { %>
-            <li><a href="/Instagrim/Images/<%=LoggedIn.getUsername(request)%>">Your Images</a></li>
-            <li><a href="/Instagrim/log-out.jsp">Log Out</a></li>
+            <li><a href="/Instagrim/images/<%=LoggedIn.getUsername(request)%>">Your Images</a></li>
+            <li><a href="/Instagrim/log-out">Log Out</a></li>
           <% } else { %>
-            <li><a href="/Instagrim/register.jsp">Register</a></li>
-            <li><a href="Login">Login</a></li>
+            <li><a href="/Instagrim/register">Register</a></li>
+            <li><a href="/Instagrim/login">Login</a></li>
           <% } %>
       </ul>
     </nav>

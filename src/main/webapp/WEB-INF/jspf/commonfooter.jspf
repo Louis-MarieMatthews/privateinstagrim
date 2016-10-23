@@ -7,7 +7,7 @@
     <li class="footer">
       <a href="/Instagrim">Home</a>
       <% if ( LoggedIn.isLoggedIn(request) ) { %>
-      <a href="/Instagrim/delete-account.jsp">Account deletion</a>
+      <a href="/Instagrim/delete-account">Account deletion</a>
       <% } %>
     </li>
   </ul>

@@ -24,7 +24,7 @@
             <%
           }  
         %>
-      <form method="POST"  action="Register">
+      <form method="POST"  action="/Instagrim/register">
         <ul>
           <li>User Name <input type="text" name="username" required></li>
           <li>Password <input type="password" name="password" required></li>

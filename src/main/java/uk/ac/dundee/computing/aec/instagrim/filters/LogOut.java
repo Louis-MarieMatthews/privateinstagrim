@@ -49,10 +49,10 @@ public class LogOut
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
     throws IOException, ServletException
   {
-    System.out.println( "LogOut.doGet(…): Method called." );
+    System.out.println( "LogOut#doGet(…): Method called." );
     LoggedIn.logOut(request);
     try {
-      ((HttpServletResponse)response).sendRedirect("/Instagrim/index.jsp");
+      ((HttpServletResponse)response).sendRedirect("/Instagrim/");
     } catch ( Throwable t ) {
       System.out.println( "LogOut.doGet(…): " + t );
     }

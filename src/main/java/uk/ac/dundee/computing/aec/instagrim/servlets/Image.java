@@ -36,6 +36,7 @@ import uk.ac.dundee.computing.aec.instagrim.exception.InvalidImageTypeException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NoUseableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
+import uk.ac.dundee.computing.aec.instagrim.filters.ExtensionConcealmentFilter;
 import uk.ac.dundee.computing.aec.instagrim.lib.Convertors;
 import uk.ac.dundee.computing.aec.instagrim.models.ImageModel;
 import uk.ac.dundee.computing.aec.instagrim.models.User;
@@ -54,8 +55,6 @@ public class Image extends HttpServlet
   private static final long serialVersionUID = 1L;
   private static final int BYTE_BLOCK = 8192;
   
-  private final HashMap commandsMap;
-  
   
   
   /**
@@ -64,11 +63,6 @@ public class Image extends HttpServlet
   public Image()
   {
     super();
-    // TODO Auto-generated constructor stub
-    commandsMap = new HashMap();
-    commandsMap.put("Image", 1);
-    commandsMap.put("Images", 2);
-    commandsMap.put("Thumb", 3);
   }
   
   
@@ -91,51 +85,39 @@ public class Image extends HttpServlet
   {
     // TODO Auto-generated method stub
     String[] args = Convertors.splitPath(request.getRequestURI());
-    for (String arg : args) {
-      ;
+    for ( String row : args ) {
+      System.out.println( "Image#doGet(…): args[] = " + row );
     }
     if (args.length>2) {
-      int command;
-      try {
-        command = (Integer) commandsMap.get(args[1]);
-      } catch (Exception et) {
-        error("Bad Operator", response);
+      if ( args[1].equals( "image" ) ) {
+        try {
+          displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
+        } catch (NoUseableSessionException e) {
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+          return;
+        }
+      }
+      else if ( args[1].equals( "images" ) ) {
+        try {
+          displayImageList(args[2], request, response);
+        } catch (NoUseableSessionException e) {
+          response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
+        }
         return;
       }
-      switch (command) {
-        case 1:
-          try {
-            displayImage(Convertors.DISPLAY_PROCESSED, args[2], request, response);
-          } catch (NoUseableSessionException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-            return;
-          }
-          break;
-        case 2:
-          try {
-            displayImageList(args[2], request, response);
-          } catch (NoUseableSessionException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-          }
-          break;
-        case 3:
+      else if ( args[1].equals( "thumb" ) ) {
           try {
           displayImage(Convertors.DISPLAY_THUMB, args[2], request, response);
           } catch (NoUseableSessionException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
             return;
           }
-          break;
-        default:
-          error("Bad Operator", response);
+      }
+      else {
+        error("Bad Operator", response);
       }
     } else {
-      try {
-        displayImageList(User.DEFAULT_USERNAME, request, response);
-      } catch (NoUseableSessionException e) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-        return;
-      }
+      response.sendError(404);
     }
   }
   
@@ -143,7 +125,6 @@ public class Image extends HttpServlet
   /**
    * Forward to response to UsersImages.jsp along with the images uploaded by a
    * user UsersImages.jsp will display.
-   * 
    * @param user the use whose images will be displayed
    * @param request
    * @param response
@@ -153,11 +134,11 @@ public class Image extends HttpServlet
   private void displayImageList(String user, HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, NullSessionException, UnavailableSessionException
   {
+    System.out.println( "Image#displayImageList(…): called with user = " + user );
     java.util.LinkedList<UserImage> lsImgs = ImageModel.getImagesForUser(user);
-    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/UsersImages.jsp");
-    // TODO: camecalse
-    request.setAttribute("images", lsImgs);
-    rd.forward(request, response);
+    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/images.jsp" );
+    request.setAttribute( "images", lsImgs );
+    rd.forward( request, response );
   }
   
   
@@ -221,37 +202,40 @@ public class Image extends HttpServlet
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
+    System.out.println( "Image#doPost( … ): called." );
     for (Part part : request.getParts()) {
-      System.out.println("Part Name " + part.getName());
+      System.out.println("Image#doPost( … ): part name: " + part.getName());
 
       String type = part.getContentType();
-      System.out.println( "Image.doPost(…): type = " + part );
+      System.out.println( "Image#doPost(…): type = " + part );
       
       String filename = part.getSubmittedFileName();
 
-      InputStream is = request.getPart(part.getName()).getInputStream();
+      InputStream is = request.getPart( part.getName() ).getInputStream();
       int i = is.available();
-      HttpSession session = request.getSession();
-      LoggedIn lg = (LoggedIn) session.getAttribute("LoggedIn");
       String username = LoggedIn.getUsername(request);
       if (i > 0) {
         byte[] b = new byte[i + 1];
         is.read(b);
         System.out.println("Length : " + b.length);
-        ImageModel tm = new ImageModel();
         try {
-          tm.insertUserImage(b, type, filename, username);
+          ImageModel.insertUserImage(b, type, filename, username);
+          RequestDispatcher rd = request.getRequestDispatcher( "/upload" );
           request.setAttribute( "message", "Your image has been uploaded sucessfully." );
-        } catch ( NoUseableSessionException e) {
+          System.out.println( "Image#doPost(…): Upload successful. Forwarding…" );
+          response.sendRedirect( "/Instagrim/upload" );
+        }
+        catch ( NoUseableSessionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
-        } catch ( IllegalArgumentException e ) {
+        }
+        catch ( IllegalArgumentException e ) {
+          RequestDispatcher rd = request.getRequestDispatcher( "/upload" );
           request.setAttribute( "message", "The file you uploaded is not one "
             + "of the accepted types of image." );
+          rd.forward(request, response);
         }
         is.close();
       }
-      RequestDispatcher rd = request.getRequestDispatcher("/upload.jsp");
-      rd.forward(request, response);
     }
   }
   

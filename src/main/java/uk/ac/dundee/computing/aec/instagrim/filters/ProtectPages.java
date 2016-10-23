@@ -82,21 +82,22 @@ public class ProtectPages
       FilterChain chain)
     throws IOException, ServletException
   {
+    System.out.println( "ProtectPages#doFilter(…) : called." );
     if (DEBUG) {
       log("ProtectPages:doFilter()");
     }
     doBeforeProcessing(request, response);
-    System.out.println("Doing filter");
     HttpServletRequest httpReq = (HttpServletRequest) request;
     HttpSession session = httpReq.getSession(false);
     LoggedIn li = (LoggedIn) session.getAttribute("LoggedIn");
     System.out.println("Session in filter " + session);
     if ((li == null) || (li.isLoggedIn() == false)) {
-      System.out.println("Foward to login");
-      RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
-      rd.forward(request, response);
-      doAfterProcessing(request, response);
+      System.out.println( "ProtectPages#doFilter(…) : not logged in, forwarding to login." );
+      ((HttpServletResponse)response).sendRedirect( "/Instagrim/login/" );
+      // doAfterProcessing(request, response);
+      return;
     }
+    System.out.println( "ProtectPages#doFilter(…) : logged in, continuing request." );
     try {
       chain.doFilter(request, response);
     } catch (IOException | ServletException exception) {

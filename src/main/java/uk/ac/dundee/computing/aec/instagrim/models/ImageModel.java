@@ -80,18 +80,6 @@ public class ImageModel
 
       Date dateAdded = new Date();
       
-      System.out.println( "ImageModel#insertUserImage(…): thumbbuf = " + thumbbuf );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      System.out.println( "ImageModel#insertUserImage(…): " );
-      
-      
-      Cassandra.query( "INSERT INTO images ( id, image , thumbnail, processed ) VALUES ( ?, ?, ?, ? )", imgId, buffer, thumbbuf, processedbuf );
-      
       
       Cassandra.query( "INSERT INTO images ("
         + "id, image, thumbnail, processed, user, interaction_time, image_length,"

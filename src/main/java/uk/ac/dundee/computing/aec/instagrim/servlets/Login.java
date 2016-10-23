@@ -48,8 +48,9 @@ public class Login extends HttpServlet
     throws ServletException, IOException
   {
     System.out.println("Login.doGet(…) called.");
-    RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-    rd.forward(request, response);
+    request.setAttribute( "already_treated", true );
+    RequestDispatcher rd = request.getRequestDispatcher( "/login.jsp" );
+    rd.include(request, response);
   }
   
   
@@ -66,6 +67,11 @@ public class Login extends HttpServlet
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException
   {
+    if ( request.getAttribute( "login_dontdopost") != null ) {
+      doGet( request, response);
+      return;
+    }
+    request.setAttribute( "already_treated", true );
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     
@@ -78,19 +84,18 @@ public class Login extends HttpServlet
 
         session.setAttribute("LoggedIn", lg);
         System.out.println("Session in servlet " + session);
-        RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-        rd.forward(request, response);
-
+        response.sendRedirect( "/Instagrim/" );
       }
       else { // if the entered details are not correct
-        RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/login/");
         request.setAttribute("details_error", "The entered details are incorrect.");
+        request.setAttribute( "login_dontdopost", true);
         rd.forward(request, response);
       }
-    } catch (NoUseableSessionException e) {
+    }
+    catch (NoUseableSessionException e) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
       return;
     }
-
   }
 }
