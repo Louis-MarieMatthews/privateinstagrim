@@ -128,6 +128,7 @@ public class Image extends HttpServlet
     java.util.LinkedList<java.util.UUID> lsImgsUuid = ImageModel.getImagesUuidForUser(user);
     RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/images.jsp" );
     request.setAttribute( "images_uuid", lsImgsUuid );
+    request.setAttribute( "username", user );
     rd.forward( request, response );
   }
   

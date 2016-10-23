@@ -26,7 +26,7 @@
           <h1>User</h1>
           <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
           <h2>Check out the pictures of this user!</h2>
-          <p><a href="<%=context%>/profile/<%=randomUser%>"><%=randomUser%></a></p>
+          <p><a href="<%=context%>/images/<%=randomUser%>"><%=randomUser%></a></p>
       </div>
     </main>
     

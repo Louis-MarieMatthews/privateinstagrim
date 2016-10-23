@@ -9,20 +9,21 @@
 <%@page import="java.util.UUID"%>
 <%@page import="java.util.Iterator"%>
 <%String context = ((HttpServletRequest)request).getContextPath();%>
+<%String username = (String) request.getAttribute( "username" );%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
   <head>
-    <% request.setAttribute("pageName", "Images"); %>
+    <% request.setAttribute("pageName", username ); %>
     <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
-    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
     
+    <%@include file="/WEB-INF/jspf/commonheader.jspf" %>
     <main>
       <div class="container">
-        <h1>Images</h1>
+        <h1><%=username%></h1>
         <%
           java.util.LinkedList<java.util.UUID> uuids = (java.util.LinkedList<java.util.UUID>) request.getAttribute("images_uuid");
           if (uuids == null) {
@@ -37,10 +38,10 @@
 
         %>
         <h3><%=ImageModel.getTitle(uuid)%></h3>
-        <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=uuid%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=uuid%>"></a><br/>
+        <p><a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=uuid%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=uuid%>"></a></p>
         <%
           if ( ImageModel.isOwner(uuid, LoggedIn.getUsername(request))) { %>
-           <a href="<%=((HttpServletRequest)request).getContextPath()%>/edit-image/<%=uuid%>">Edit image</a>
+        <p><a href="<%=((HttpServletRequest)request).getContextPath()%>/edit-image/<%=uuid%>">Edit image</a></p>
        <% }
             }
           }

@@ -12,7 +12,7 @@
 <link href="<%=((HttpServletRequest)request).getContextPath()%>/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="<%=((HttpServletRequest)request).getContextPath()%>/sticky-footer.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
+<link href="<%=((HttpServletRequest)request).getContextPath()%>/style.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
 
