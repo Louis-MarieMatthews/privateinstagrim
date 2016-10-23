@@ -22,7 +22,7 @@
             %>
             <p><%=request.getAttribute("details_error") %></p>
             <%
-          }  
+          }
             %>
       <form method="POST"  action="/Instagrim/login">
         <ul>
@@ -30,6 +30,12 @@
           <li>Password <input type="password" name="password" required></li>
         </ul>
         <br/>
+        <%
+          String previousPage = (String) request.getAttribute( "previous_page" );
+          if ( previousPage != null ) {
+        %>
+        <input type="hidden" name="previous_page" value="<%=previousPage%>">
+        <% } %>
         <input type="submit" value="Login"> 
       </form>
 

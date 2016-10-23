@@ -95,7 +95,8 @@ public class Register extends HttpServlet
       rd.forward(request, response);
       return;
     }
-
+    
+    request.getSession().setAttribute( "confirmation_message", "You have sucessfully created an account.");
     response.sendRedirect("/Instagrim");
   }
 }

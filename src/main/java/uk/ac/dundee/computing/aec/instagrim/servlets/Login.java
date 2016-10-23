@@ -84,7 +84,12 @@ public class Login extends HttpServlet
 
         session.setAttribute("LoggedIn", lg);
         System.out.println("Session in servlet " + session);
-        response.sendRedirect( "/Instagrim/" );
+        String previousPage = (String) request.getParameter( "previous_page" );
+        if ( previousPage != null ) {
+          response.sendRedirect( previousPage );
+        } else {
+          response.sendRedirect( "/Instagrim/" );
+        }
       }
       else { // if the entered details are not correct
         RequestDispatcher rd = request.getRequestDispatcher("/login/");
