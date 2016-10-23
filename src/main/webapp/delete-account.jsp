@@ -18,16 +18,16 @@
     <main>
       <h3>Account Deletion Page</h3>
         <%
-          if ( request.getAttribute("details_error") != null ) {
+          if ( request.getAttribute("error_message") != null ) {
             %>
-            <p><%=request.getAttribute("details_error") %></p>
+            <p><%=request.getAttribute("error_message") %></p>
             <%
           }  
         %>
       <p>This page allows you to delete your account, should the improbable 
       need ever arises. This is an important operation, for that reason you
       are asked to reenter your username and your password.</p>
-      <form method="POST"  action="/Instagrim/delete-account">
+      <form method="POST"  action="<%=((HttpServletRequest)request).getContextPath()%>/delete-account">
         <ul>
           <li>Username <input type="text" name="username" required></li>
           <li>Password <input type="password" name="password" required></li>

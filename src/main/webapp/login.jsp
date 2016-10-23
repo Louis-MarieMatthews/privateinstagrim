@@ -24,7 +24,7 @@
             <%
           }
             %>
-      <form method="POST"  action="/Instagrim/login">
+      <form method="POST"  action="<%=((HttpServletRequest)request).getContextPath()%>/login">
         <ul>
           <li>User Name <input type="text" name="username" required></li>
           <li>Password <input type="password" name="password" required></li>

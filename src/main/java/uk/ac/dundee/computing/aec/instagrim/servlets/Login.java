@@ -88,7 +88,7 @@ public class Login extends HttpServlet
         if ( previousPage != null ) {
           response.sendRedirect( previousPage );
         } else {
-          response.sendRedirect( "/Instagrim/" );
+          response.sendRedirect( ((HttpServletRequest)request).getContextPath() );
         }
       }
       else { // if the entered details are not correct

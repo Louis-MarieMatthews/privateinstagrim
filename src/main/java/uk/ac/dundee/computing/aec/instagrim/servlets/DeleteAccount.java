@@ -46,9 +46,15 @@ public class DeleteAccount extends HttpServlet
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException
   {
-    request.setAttribute( "already_treated", true );
+    if ( request.getAttribute( "already_processed") != null ) {
+      request.setAttribute( "already_processed", null);
+      doGet( request, response );
+      return;
+    } else {
+      request.setAttribute( "already_processed", true );
+    }
     System.out.println("DeleteAccount.doFilter(): called.");
-    RequestDispatcher rd = request.getRequestDispatcher("/");
+    RequestDispatcher rd = request.getRequestDispatcher( "/" );
     String username = request.getParameter("username");
     String password = request.getParameter("password");
     System.out.println( "DeleteAccount.doPost(…): username = " + username );
@@ -65,8 +71,8 @@ public class DeleteAccount extends HttpServlet
         + " were not able to delete your account. ");
     }
     catch ( WrongLoginDetailsException e ) {
-      rd = request.getRequestDispatcher("/delete-account");
-        request.setAttribute("error_message", "The entered details are incorrect.");
+      request.setAttribute( "error_message", "The entered details are incorrect." );
+      rd = request.getRequestDispatcher( "/delete-account" );
     }
     catch ( Throwable t ) {
       System.out.println( "DeleteAccount.doPost(…): " + t );

@@ -5,9 +5,9 @@
 <footer>
   <ul>
     <li class="footer">
-      <a href="/Instagrim">Home</a>
+      <a href="<%=((HttpServletRequest)request).getContextPath()%>/">Home</a>
       <% if ( LoggedIn.isLoggedIn(request) ) { %>
-      <a href="/Instagrim/delete-account">Account deletion</a>
+      <a href="<%=((HttpServletRequest)request).getContextPath()%>/delete-account">Account deletion</a>
       <% } %>
     </li>
   </ul>

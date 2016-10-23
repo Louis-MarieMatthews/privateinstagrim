@@ -93,7 +93,7 @@ public class ProtectPages
     System.out.println("Session in filter " + session);
     if ((li == null) || (li.isLoggedIn() == false)) {
       System.out.println( "ProtectPages#doFilter(…) : not logged in, forwarding to login." );
-      ((HttpServletResponse)response).sendRedirect( "/Instagrim/login/" );
+      ((HttpServletResponse)response).sendRedirect( ((HttpServletRequest)request).getContextPath() + "/login/" );
       // doAfterProcessing(request, response);
       return;
     }

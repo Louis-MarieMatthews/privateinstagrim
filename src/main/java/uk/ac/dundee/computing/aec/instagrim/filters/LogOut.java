@@ -52,7 +52,7 @@ public class LogOut
     System.out.println( "LogOut#doGet(…): Method called." );
     LoggedIn.logOut(request);
     try {
-      ((HttpServletResponse)response).sendRedirect("/Instagrim/");
+      ((HttpServletResponse)response).sendRedirect( ((HttpServletRequest)request).getContextPath() );
     } catch ( Throwable t ) {
       System.out.println( "LogOut.doGet(…): " + t );
     }

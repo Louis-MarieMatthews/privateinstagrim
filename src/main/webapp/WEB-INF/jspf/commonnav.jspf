@@ -5,13 +5,13 @@
 
     <nav>
       <ul>
-        <li><a href="/Instagrim/upload">Upload</a></li>
+        <li><a href="<%=((HttpServletRequest)request).getContextPath()%>/upload">Upload</a></li>
           <% if (LoggedIn.isLoggedIn(request) ) { %>
-            <li><a href="/Instagrim/images/<%=LoggedIn.getUsername(request)%>">Your Images</a></li>
-            <li><a href="/Instagrim/log-out">Log Out</a></li>
+            <li><a href="<%=((HttpServletRequest)request).getContextPath()%>/images/<%=LoggedIn.getUsername(request)%>">Your Images</a></li>
+            <li><a href="<%=((HttpServletRequest)request).getContextPath()%>/log-out">Log Out</a></li>
           <% } else { %>
-            <li><a href="/Instagrim/register">Register</a></li>
-            <li><a href="/Instagrim/login">Login</a></li>
+            <li><a href="<%=((HttpServletRequest)request).getContextPath()%>/register">Register</a></li>
+            <li><a href="<%=((HttpServletRequest)request).getContextPath()%>/login">Login</a></li>
           <% } %>
       </ul>
     </nav>

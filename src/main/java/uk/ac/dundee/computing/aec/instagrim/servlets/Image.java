@@ -223,7 +223,7 @@ public class Image extends HttpServlet
           RequestDispatcher rd = request.getRequestDispatcher( "/upload" );
           request.setAttribute( "message", "Your image has been uploaded sucessfully." );
           System.out.println( "Image#doPost(…): Upload successful. Forwarding…" );
-          response.sendRedirect( "/Instagrim/upload" );
+          response.sendRedirect( ((HttpServletRequest)request).getContextPath() + "/upload" );
         }
         catch ( NoUseableSessionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );

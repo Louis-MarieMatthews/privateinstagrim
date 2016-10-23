@@ -34,7 +34,7 @@
           UserImage img = (UserImage) iterator.next();
 
       %>
-      <a href="/Instagrim/image/<%=img.getStringUuid()%>" ><img src="/Instagrim/thumb/<%=img.getStringUuid()%>"></a><br/><%
+      <a href="<%=((HttpServletRequest)request).getContextPath()%>/image/<%=img.getStringUuid()%>" ><img src="<%=((HttpServletRequest)request).getContextPath()%>/thumb/<%=img.getStringUuid()%>"></a><br/><%
 
           }
         }
