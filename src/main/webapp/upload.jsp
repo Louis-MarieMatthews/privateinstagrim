@@ -17,6 +17,7 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
     <main>
+      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
       <h3>File Upload</h3>
         <%
           if ( request.getAttribute("message") != null ) {

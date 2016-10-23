@@ -16,6 +16,7 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
     <main>
+      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
       <h3>Login</h3>
         <%
           if ( request.getAttribute("details_error") != null ) {

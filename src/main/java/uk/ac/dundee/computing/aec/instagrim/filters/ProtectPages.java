@@ -86,14 +86,13 @@ public class ProtectPages
     if (DEBUG) {
       log("ProtectPages:doFilter()");
     }
-    doBeforeProcessing(request, response);
-    HttpServletRequest httpReq = (HttpServletRequest) request;
-    HttpSession session = httpReq.getSession(false);
-    LoggedIn li = (LoggedIn) session.getAttribute("LoggedIn");
-    System.out.println("Session in filter " + session);
-    if ((li == null) || (li.isLoggedIn() == false)) {
+    if ( ! LoggedIn.isLoggedIn( request ) ) {
+      HttpServletRequest hr = (HttpServletRequest) request;
       System.out.println( "ProtectPages#doFilter(…) : not logged in, forwarding to login." );
-      ((HttpServletResponse)response).sendRedirect( ((HttpServletRequest)request).getContextPath() + "/login/" );
+      request.setAttribute( "error_message", "You need to be logged-in to access this content." );
+      request.setAttribute( "previous_page", hr.getRequestURL().toString() );
+      RequestDispatcher rd = request.getRequestDispatcher( "/login/" );
+      rd.forward(request, response);
       // doAfterProcessing(request, response);
       return;
     }

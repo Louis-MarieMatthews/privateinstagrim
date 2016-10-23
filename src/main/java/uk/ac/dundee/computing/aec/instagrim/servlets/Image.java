@@ -203,12 +203,6 @@ public class Image extends HttpServlet
     throws ServletException, IOException
   {
     System.out.println( "Image#doPost( … ): called." );
-    if ( ! LoggedIn.isLoggedIn(request) ) {
-      request.getSession().setAttribute( "last_visited_page", "/upload" );
-      RequestDispatcher rd = request.getRequestDispatcher( "/" );
-      rd.forward( request, response );
-      return;
-    }
     for (Part part : request.getParts()) {
       System.out.println("Image#doPost( … ): part name: " + part.getName());
 

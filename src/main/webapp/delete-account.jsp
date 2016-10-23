@@ -16,6 +16,7 @@
     <%@include file="/WEB-INF/jspf/commonnav.jspf" %>
 
     <main>
+      <%@include file="/WEB-INF/jspf/commonnotifications.jspf" %>
       <h3>Account Deletion Page</h3>
         <%
           if ( request.getAttribute("error_message") != null ) {
