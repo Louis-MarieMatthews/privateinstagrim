@@ -31,9 +31,19 @@ public class UserImage
   
   
   
-  //TODO: remove method
-  public void UserImage()
+  
+  public UserImage()
   {
+  }
+  
+  
+  
+  
+  public UserImage(ByteBuffer bImage, int length, String type)
+  {
+    this.bImage = bImage;
+    this.length = length;
+    this.type = type;
   }
   
   
@@ -48,15 +58,6 @@ public class UserImage
   public String getStringUuid()
   {
     return uuid.toString();
-  }
-  
-  
-  
-  public void set(ByteBuffer bImage, int length, String type)
-  {
-    this.bImage = bImage;
-    this.length = length;
-    this.type = type;
   }
   
   

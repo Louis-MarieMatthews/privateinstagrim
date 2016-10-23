@@ -102,6 +102,18 @@
     
     <filter-mapping>
       <filter-name>protectpages</filter-name>
+      <url-pattern>/images</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpages</filter-name>
+      <url-pattern>/images/*</url-pattern>
+    </filter-mapping>
+    
+    
+    <filter-mapping>
+      <filter-name>protectpages</filter-name>
       <url-pattern>/delete-account</url-pattern>
     </filter-mapping>
     

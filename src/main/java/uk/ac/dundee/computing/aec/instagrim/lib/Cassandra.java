@@ -120,8 +120,7 @@ public final class Cassandra
   {
     try {
       //Add some keyspaces here
-      //TODO keyspace in uppercase
-      String createKeyspace = "CREATE keyspace IF NOT EXISTS instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
+      String createKeyspace = "CREATE KEYSPACE IF NOT EXISTS instagrim  WITH replication = {'class':'SimpleStrategy', 'replication_factor':1}";
       String createImgTable = "CREATE TABLE IF NOT EXISTS instagrim.images ("
           + " user VARCHAR,"
           + " id UUID, "

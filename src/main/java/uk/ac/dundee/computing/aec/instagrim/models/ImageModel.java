@@ -235,8 +235,7 @@ public class ImageModel
       System.out.println("Can't get img " + et);
       return null;
     }
-    UserImage p = new UserImage();
-    p.set(bImage, length, type);
+    UserImage p = new UserImage(bImage, length, type);
 
     return p;
   }

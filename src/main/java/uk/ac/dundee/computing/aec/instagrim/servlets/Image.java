@@ -220,17 +220,16 @@ public class Image extends HttpServlet
         System.out.println("Length : " + b.length);
         try {
           ImageModel.insertUserImage(b, type, filename, username);
-          RequestDispatcher rd = request.getRequestDispatcher( "/upload" );
-          request.setAttribute( "message", "Your image has been uploaded sucessfully." );
+          request.setAttribute( "confirmation_message", "Your image has been uploaded sucessfully." );
           System.out.println( "Image#doPost(…): Upload successful. Forwarding…" );
-          response.sendRedirect( ((HttpServletRequest)request).getContextPath() + "/upload" );
+          response.sendRedirect( ((HttpServletRequest)request).getContextPath() + "/images/" + LoggedIn.getUsername( request ) );
         }
         catch ( NoUseableSessionException e) {
           response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR );
         }
         catch ( IllegalArgumentException e ) {
           RequestDispatcher rd = request.getRequestDispatcher( "/upload" );
-          request.setAttribute( "message", "The file you uploaded is not one "
+          request.setAttribute( "error_message", "The file you uploaded is not one "
             + "of the accepted types of image." );
           rd.forward(request, response);
         }

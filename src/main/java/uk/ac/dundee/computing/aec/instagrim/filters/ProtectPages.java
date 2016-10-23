@@ -92,7 +92,8 @@ public class ProtectPages
       request.setAttribute( "error_message", "You need to be logged-in to access this content." );
       request.setAttribute( "previous_page", hr.getRequestURL().toString() );
       RequestDispatcher rd = request.getRequestDispatcher( "/login/" );
-      rd.forward(request, response);
+      // rd.forward(request, response);
+      ((HttpServletResponse)response).sendRedirect( ((HttpServletRequest)request).getContextPath() + "/login" );
       // doAfterProcessing(request, response);
       return;
     }
