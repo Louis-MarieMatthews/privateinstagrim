@@ -20,7 +20,9 @@ import com.datastax.driver.core.Row;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Random;
 import uk.ac.dundee.computing.aec.instagrim.exception.NullSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UnavailableSessionException;
 import uk.ac.dundee.computing.aec.instagrim.exception.UsernameNotAsciiException;
@@ -173,5 +175,44 @@ public class User
       System.out.println( "User#getEmail(…): " + t );
     }
     return email;
+  }
+  
+  
+  
+  public static String getRandomUser()
+    throws NullSessionException, UnavailableSessionException
+  {
+    try {
+      ResultSet rs = Cassandra.query( "SELECT login FROM user_profiles" );
+      ResultSet rs2 = Cassandra.query( "SELECT login FROM user_profiles" );
+      Iterator iterator = rs.iterator();
+      Iterator iterator2 = rs2.iterator();
+      Integer i = 0;
+      while( iterator.hasNext() ) {
+        i++;
+        iterator.next();
+      }
+      
+      if ( i == 0 ) {
+        return null;
+      }
+      
+      Integer r = (new Random()).nextInt( i );
+      
+      for ( Integer n = -1; n < i; n++ ) {
+        System.out.println( "n = " + n + " and r = " + r );
+        if ( n + 1 == r ) {
+          String randomUser = ((Row) iterator2.next()).getString( "login" );
+          System.out.println("User#getRandomUser(): user who got picked is " + randomUser );
+          return randomUser;
+        } else {
+          iterator2.next();
+        }
+      }
+    }
+    catch(Throwable t) {
+      System.out.println( "User#getRandomUser(…): " + t );
+    }
+    return null;
   }
 }

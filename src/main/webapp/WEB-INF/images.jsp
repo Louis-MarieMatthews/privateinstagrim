@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <% request.setAttribute("pageName", Images"); %>
+    <% request.setAttribute("pageName", "Images"); %>
     <%@include file="/WEB-INF/jspf/commonhead.jspf" %>
   </head>
   <body>
