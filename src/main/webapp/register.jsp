@@ -29,15 +29,15 @@
           %>
         <form method="POST" action="<%=((HttpServletRequest)request).getContextPath()%>/register">
           <div class="form-group">
-          <label for="username">Username: </label>
-          <input type="text" name="username" class="sr-only" placeholder="Username" autofocus required>
+            <label for="username">Username: </label>
+           <input type="text" name="username" id="username" placeholder="Username" autofocus required>
           </div>
           <div class="form-group">
-          <label for="password" class="sr-only">Password: </label>
-          <input type="password" name="password" placeholder="Password" required>
+           <label for="password">Password: </label>
+           <input type="password" name="password" id="password" placeholder="Password" required>
           </div>
           <div class="form-group">
-          <button class="btn btn-default" type="submit">Register</button>
+            <button class="btn btn-default" type="submit">Register</button>
           </div>
         </form>
       </div>
